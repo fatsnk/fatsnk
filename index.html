@@ -820,5 +820,27 @@
             </p>
         </div>
     </div>
+    <!-- Visit Tracker Script -->
+<script>
+  (function() {
+    // 防止在本地开发或预览时重复记录
+    if (window.location.hostname === 'localhost' || window.location.protocol === 'file:') {
+      return;
+    }
+
+    fetch('https://tr.lifs.ip-ddns.com:2096/gh-stats/api/track', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        referer: document.referrer,
+        user_agent: navigator.userAgent,
+      }),
+      mode: 'cors'
+    }).catch(error => console.error('Error tracking visit:', error));
+  })();
+</script>
+
 </body>
 </html>
