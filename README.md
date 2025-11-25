@@ -1,4 +1,4 @@
-![项目横幅](image/banner01.png "点击查看大图")
+![项目横幅](image/banner02.png "点击查看大图")
 
 * [ForkSilly主页](https://fatsnk.github.io/fatsnk/)
 <!--
