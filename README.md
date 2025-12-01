@@ -1,6 +1,6 @@
 ![项目横幅](image/banner02.png "点击查看大图")
 
-* [ForkSilly主页](https://fatsnk.github.io/fatsnk/)
+* **[ForkSilly主页](https://fatsnk.github.io/fatsnk/)**
 <!--
 **fatsnk/fatsnk** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
 
