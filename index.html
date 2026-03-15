@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -5,7 +6,97 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="color-scheme" content="light dark">
     <link rel="icon" type="image/png" href="./image/favicon.png">
-    <title>ForkSilly - 轻量级移动端AIRP应用</title>
+
+    <!-- Primary Meta Tags -->
+    <title>ForkSilly — Android 移动端 AI 聊天与角色扮演应用 | 兼容 SillyTavern</title>
+    <meta name="description" content="ForkSilly 是一款面向 Android 的 AI 聊天应用，兼容 SillyTavern 角色卡与预设，内置 API 模板引擎、MCP 工具调用、图像生成与向量记忆系统，提供轻量、经济的移动端 AI 交互体验。">
+    <meta name="keywords" content="ForkSilly, SillyTavern, Android, AI聊天, 角色扮演, AIRP, API模板引擎, MCP, 文生图, Stable Diffusion, 向量记忆, 角色卡, 世界书, 移动端AI">
+    <meta name="author" content="fatsnk">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="ForkSilly — Android 移动端 AI 聊天与角色扮演应用">
+    <meta property="og:description" content="兼容 SillyTavern，内置 API 模板引擎、MCP 工具调用、图像生成与向量记忆，轻量经济的移动端 AI 交互体验。">
+    <meta property="og:url" content="https://fatsnk.github.io/forksilly/">
+    <meta property="og:image" content="./image/ReferenceImg.jpg">
+    <meta property="og:locale" content="zh_CN">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="ForkSilly — Android AI 聊天与角色扮演应用">
+    <meta name="twitter:description" content="兼容 SillyTavern，内置 API 模板引擎、MCP 工具调用、图像生成与向量记忆系统。">
+    <meta name="twitter:image" content="./image/ReferenceImg.jpg">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "ForkSilly",
+        "operatingSystem": "Android",
+        "applicationCategory": "CommunicationApplication",
+        "description": "ForkSilly 是一款面向 Android 的 AI 聊天应用，兼容 SillyTavern 角色卡与预设，内置 API 模板引擎、MCP 工具调用、图像生成与向量记忆系统。",
+        "softwareVersion": "1.27",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "CNY"
+        },
+        "featureList": [
+            "兼容 SillyTavern V2 角色卡、世界书、正则、预设",
+            "API 模板引擎，支持 OpenAI、Claude、Gemini 等接口",
+            "MCP 服务与工具调用系统",
+            "Stable Diffusion 与 pollinations.ai 图像生成",
+            "基于向量数据库的记忆与知识库",
+            "配置档快速切换",
+            "数据备份与迁移"
+        ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "ForkSilly 支持哪些 AI 模型和 API？",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "ForkSilly 内置 API 模板引擎，通过 JSON 配置文件描述任意 LLM API 的请求与响应结构。开箱支持 OpenAI、Gemini 等常见接口，也可通过导入自定义模板适配其他供应商或私有化部署的 API。"
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "ForkSilly 和 SillyTavern 有什么关系？",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "ForkSilly 兼容 SillyTavern V2 格式的角色卡、世界书、正则表达式、聊天记录与提示词预设，可以直接导入使用。同时在此基础上扩展了 API 模板引擎、图像生成、MCP 工具调用等功能。"
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "ForkSilly 可以免费使用吗？",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "ForkSilly 本身完全免费开源。配合 Google Gemini 免费模型 + SiliconFlow 免费嵌入模型 + Stable Diffusion 或 pollinations.ai 免费图像生成，可以实现零成本的图文记忆对话体验。"
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "什么是 MCP 工具调用？",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "ForkSilly 支持连接 Streamable HTTP 协议的 MCP (Model Context Protocol) 服务，自动获取可用工具列表并注册到工具系统。工具调用不依赖 LLM 自身的函数调用能力，在提示词中添加工具说明后，大模型可在聊天中随时调用已注册的工具，扩展 AI 的外部能力。"
+                }
+            }
+        ]
+    }
+    </script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
     <style>
         * {
             margin: 0;
@@ -14,6 +105,10 @@
         }
         :root {color-scheme: light dark;}
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
             line-height: 1.6;
@@ -21,32 +116,13 @@
             margin:0;
             background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
             background-size: 400% 400%;
-            -webkit-animation: gradient 15s ease infinite;
             animation: gradient 15s ease infinite;
         }
 
-        @-webkit-keyframes gradient {
-            0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
-        }
-
         @keyframes gradient {
-            0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         .container {
@@ -55,7 +131,7 @@
             padding: 0 20px;
         }
 
-        /* New Header */
+        /* Header */
         .header {
             position: relative;
             text-align: center;
@@ -65,7 +141,7 @@
         }
 
         .inner-header {
-            height: 50vh; /* Adjusted height */
+            height: 50vh;
             width:100%;
             margin: 0;
             padding: 20px 0;
@@ -80,7 +156,7 @@
             position:relative;
             width: 100%;
             height:15vh;
-            margin-bottom:-7px; /*Fix for safari gap*/
+            margin-bottom:-7px;
             min-height:100px;
             max-height:150px;
         }
@@ -88,32 +164,16 @@
         .parallax > use {
             animation: move-forever 25s cubic-bezier(.55,.5,.45,.5) infinite;
         }
-        .parallax > use:nth-child(1) {
-            animation-delay: -2s;
-            animation-duration: 7s;
-        }
-        .parallax > use:nth-child(2) {
-            animation-delay: -3s;
-            animation-duration: 10s;
-        }
-        .parallax > use:nth-child(3) {
-            animation-delay: -4s;
-            animation-duration: 13s;
-        }
-        .parallax > use:nth-child(4) {
-            animation-delay: -5s;
-            animation-duration: 20s;
-        }
+        .parallax > use:nth-child(1) { animation-delay: -2s; animation-duration: 7s; }
+        .parallax > use:nth-child(2) { animation-delay: -3s; animation-duration: 10s; }
+        .parallax > use:nth-child(3) { animation-delay: -4s; animation-duration: 13s; }
+        .parallax > use:nth-child(4) { animation-delay: -5s; animation-duration: 20s; }
+
         @keyframes move-forever {
-            0% {
-            transform: translate3d(-90px,0,0);
-            }
-            100% { 
-                transform: translate3d(85px,0,0);
-            }
+            0% { transform: translate3d(-90px,0,0); }
+            100% { transform: translate3d(85px,0,0); }
         }
 
-        /* Original Header Content Styling */
         .headerTitleContainer {
             background-color: #000;
             display: inline-flex;
@@ -149,15 +209,36 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
         }
 
         .subtitle {
-            font-size: 1.4rem;
-            opacity: 0.9;
+            font-size: 1.3rem;
+            opacity: 0.95;
+            font-weight: 300;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        .subtitle-secondary {
+            font-size: 1rem;
+            opacity: 0.8;
             font-weight: 300;
             margin-bottom: 2rem;
+            color: rgba(255,255,255,0.85);
+        }
+
+        /* Version Badge */
+        .version-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
             color: white;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(255,255,255,0.3);
         }
 
         /* Action Buttons */
@@ -208,6 +289,11 @@
             box-shadow: 0 8px 25px rgba(0,0,0,0.2);
         }
 
+        .btn .lucide {
+            width: 18px;
+            height: 18px;
+        }
+
         /* Screenshot Carousel */
         .screenshot-section {
             padding: 20px 0 40px;
@@ -223,14 +309,12 @@
             box-shadow: 0 20px 40px rgba(0,0,0,0.3);
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
-            -webkit-overflow-scrolling: touch; /* for smooth scrolling on iOS */
-            scrollbar-width: none; /* for Firefox */
-            -ms-overflow-style: none;  /* for Internet Explorer and Edge */
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
         }
 
-        .carousel-container::-webkit-scrollbar {
-            display: none; /* for Chrome, Safari, and Opera */
-        }
+        .carousel-container::-webkit-scrollbar { display: none; }
 
         .carousel {
             display: flex;
@@ -259,18 +343,8 @@
             display: block;
         }
 
-        @keyframes drumRoll {
-            0% { transform: translateX(0); }
-            20% { transform: translateX(-20%); }
-            40% { transform: translateX(-40%); }
-            60% { transform: translateX(-60%); }
-            80% { transform: translateX(-80%); }
-            100% { transform: translateX(-100%); }
-        }
-
-        .carousel-container:hover .carousel {
-            animation-play-state: paused;
-        }
+        .carousel-container:hover .carousel { animation-play-state: paused; }
+        .carousel-container:hover .carousel img { transform: scale(1.03); }
 
         @media (min-width: 769px) {
             .carousel-container {
@@ -282,9 +356,7 @@
                 width: 125%;
                 animation: desktop-drumRoll 20s infinite linear;
             }
-            .carousel-item {
-                aspect-ratio: unset;
-            }
+            .carousel-item { aspect-ratio: unset; }
             @keyframes desktop-drumRoll {
                 0% { transform: translateX(0); }
                 45% { transform: translateX(0); }
@@ -294,19 +366,85 @@
             }
         }
 
-        .carousel-container:hover .carousel img {
-            transform: scale(1.03);
-        }
-
         /* Main Content */
         .main-content {
             background: white;
             border-radius: 20px 20px 0 0;
             padding: 60px 0;
-            margin-top: -15px; /* Adjusted to connect with waves */
+            margin-top: -15px;
             position: relative;
             z-index: 10;
             box-shadow: 0 -10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        /* 流光色块层 */
+        .main-content::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            background:
+                radial-gradient(ellipse 600px 600px at 15% 20%, rgba(247,151,29,0.45) 0%, transparent 70%),
+                radial-gradient(ellipse 500px 500px at 80% 35%, rgba(35,166,213,0.4) 0%, transparent 70%),
+                radial-gradient(ellipse 550px 550px at 50% 75%, rgba(231,60,126,0.35) 0%, transparent 70%);
+            animation: aurora-drift 20s ease-in-out infinite alternate;
+            pointer-events: none;
+        }
+
+        /* 磨砂玻璃层 */
+        .main-content::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            backdrop-filter: blur(100px);
+            -webkit-backdrop-filter: blur(100px);
+            pointer-events: none;
+        }
+
+        /* 确保内容在伪元素之上 */
+        .main-content > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        @keyframes aurora-drift {
+            0% {
+                background:
+                    radial-gradient(ellipse 600px 600px at 15% 20%, rgba(247,151,29,0.45) 0%, transparent 70%),
+                    radial-gradient(ellipse 500px 500px at 80% 35%, rgba(35,166,213,0.4) 0%, transparent 70%),
+                    radial-gradient(ellipse 550px 550px at 50% 75%, rgba(231,60,126,0.35) 0%, transparent 70%);
+            }
+            33% {
+                background:
+                    radial-gradient(ellipse 650px 550px at 35% 40%, rgba(247,151,29,0.45) 0%, transparent 70%),
+                    radial-gradient(ellipse 550px 600px at 65% 15%, rgba(35,166,213,0.4) 0%, transparent 70%),
+                    radial-gradient(ellipse 500px 600px at 30% 85%, rgba(231,60,126,0.35) 0%, transparent 70%);
+            }
+            66% {
+                background:
+                    radial-gradient(ellipse 550px 650px at 70% 30%, rgba(247,151,29,0.45) 0%, transparent 70%),
+                    radial-gradient(ellipse 600px 500px at 20% 60%, rgba(35,166,213,0.4) 0%, transparent 70%),
+                    radial-gradient(ellipse 600px 550px at 75% 80%, rgba(231,60,126,0.35) 0%, transparent 70%);
+            }
+            100% {
+                background:
+                    radial-gradient(ellipse 600px 600px at 50% 15%, rgba(247,151,29,0.45) 0%, transparent 70%),
+                    radial-gradient(ellipse 500px 550px at 85% 55%, rgba(35,166,213,0.4) 0%, transparent 70%),
+                    radial-gradient(ellipse 550px 500px at 15% 70%, rgba(231,60,126,0.35) 0%, transparent 70%);
+            }
+        }
+
+        /* 碎片飘落 Canvas */
+        .shards-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1500px;
+            z-index: 3;
+            pointer-events: none;
         }
 
         .section {
@@ -330,6 +468,15 @@
             display: block;
             margin: 1rem auto;
             border-radius: 2px;
+        }
+
+        .section-desc {
+            text-align: center;
+            color: #6c757d;
+            font-size: 1.05rem;
+            max-width: 700px;
+            margin: -0.5rem auto 2rem;
+            line-height: 1.7;
         }
 
         /* Target Audience */
@@ -357,6 +504,16 @@
             color: #495057;
             font-weight: 600;
             margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .target-item h3 .lucide {
+            width: 22px;
+            height: 22px;
+            color: #f7971d;
+            flex-shrink: 0;
         }
 
         .target-item p {
@@ -396,8 +553,12 @@
             align-items: center;
             justify-content: center;
             margin: 0 auto 20px;
-            font-size: 1.5rem;
             color: white;
+        }
+
+        .feature-icon .lucide {
+            width: 28px;
+            height: 28px;
         }
 
         .feature-card h3 {
@@ -409,6 +570,73 @@
         .feature-card p {
             color: #6c757d;
             line-height: 1.6;
+        }
+
+        /* What's New Section */
+        .whats-new-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-top: 30px;
+        }
+
+        .new-feature-card {
+            background: linear-gradient(135deg, #fff8f0, #fff3e6);
+            padding: 28px;
+            border-radius: 15px;
+            border: 1px solid rgba(247, 151, 29, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .new-feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, #f7971d, #e73c7e);
+            border-radius: 2px 0 0 2px;
+        }
+
+        .new-feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(247, 151, 29, 0.15);
+        }
+
+        .new-feature-card h3 {
+            color: #2c3e50;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .new-feature-card h3 .lucide {
+            width: 22px;
+            height: 22px;
+            color: #f7971d;
+            flex-shrink: 0;
+        }
+
+        .new-feature-card p {
+            color: #6c757d;
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+
+        .new-feature-card .tag {
+            display: inline-block;
+            background: linear-gradient(135deg, #f7971d, #e6890b);
+            color: white;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 10px;
         }
 
         /* Philosophy */
@@ -432,6 +660,7 @@
             color: #495057;
             line-height: 1.8;
             margin-bottom: 20px;
+            text-align: center;
         }
 
         .highlight-points {
@@ -447,6 +676,63 @@
             border-radius: 10px;
             border-left: 4px solid #87CEEB;
             box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .highlight-point h4 {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            color: #2c3e50;
+        }
+
+        .highlight-point h4 .lucide {
+            width: 20px;
+            height: 20px;
+            color: #23a6d5;
+            flex-shrink: 0;
+        }
+
+        .highlight-point p {
+            color: #6c757d;
+            line-height: 1.6;
+        }
+
+        /* Doc Links */
+        .doc-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        .doc-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 18px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            color: #495057;
+            border: 1px solid #dee2e6;
+        }
+
+        .doc-link:hover {
+            background: linear-gradient(135deg, #f7971d, #e6890b);
+            color: white;
+            border-color: transparent;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(247, 151, 29, 0.3);
+        }
+
+        .doc-link .lucide {
+            width: 16px;
+            height: 16px;
         }
 
         /* Footer */
@@ -471,158 +757,130 @@
         @media (max-width: 768px) {
             body {
                 background-size: 1000% 1000%;
-                -webkit-animation: gradient 15s ease infinite;
-                animation: gradient 15s ease infinite;
             }
-            .forkText, .sillyText {
-                font-size: 2.5rem;
-            }
-
-            .logo {
-                font-size: 2.5rem;
-            }
-            
-            .subtitle {
-                font-size: 1.1rem;
-            }
-            
-            .waves {
-                height:40px;
-                min-height:40px;
-            }
-
-            .inner-header {
-                height: auto;
-                padding: 40px 0;
-            }
-
-            .section-title {
-                font-size: 1.8rem;
-            }
-            
-            .target-grid,
-            .features-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .philosophy-content {
-                padding: 25px;
-            }
-
-            .action-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .btn {
-                width: 200px;
-                justify-content: center;
-            }
+            .forkText, .sillyText { font-size: 2.5rem; }
+            .logo { font-size: 2.5rem; }
+            .subtitle { font-size: 1.1rem; }
+            .waves { height:40px; min-height:40px; }
+            .inner-header { height: auto; padding: 40px 0; }
+            .section-title { font-size: 1.8rem; }
+            .target-grid, .features-grid, .whats-new-grid { grid-template-columns: 1fr; }
+            .philosophy-content { padding: 25px; }
+            .action-buttons { flex-direction: column; align-items: center; }
+            .btn { width: 200px; justify-content: center; }
         }
 
-        /* Button icons */
-        .btn-icon::before {
-            font-size: 1.1em;
-        }
-
-        .btn-download::before {
-            content: "⬇️";
-        }
-
-        .btn-about::before {
-            content: "ℹ️";
-        }
-
-        .btn-help::before {
-            content: "📖";
-        }
-
-        /* Dark Mode Styles */
+        /* Dark Mode */
         @media (prefers-color-scheme: dark) {
-            body {
-                color: #333;
-            }
+            body { color: #333; }
 
             .main-content {
                 background: linear-gradient(to bottom, #C2F0F7, #0d143b);
                 box-shadow: 0 -10px 30px rgba(0,0,0,0.5);
             }
 
+            .main-content::before {
+                background:
+                    radial-gradient(ellipse 600px 600px at 15% 20%, rgba(255,167,38,0.35) 0%, transparent 70%),
+                    radial-gradient(ellipse 500px 500px at 80% 35%, rgba(100,180,255,0.3) 0%, transparent 70%),
+                    radial-gradient(ellipse 550px 550px at 50% 75%, rgba(200,80,160,0.3) 0%, transparent 70%);
+                animation: aurora-drift-dark 20s ease-in-out infinite alternate;
+            }
+
+            @keyframes aurora-drift-dark {
+                0% {
+                    background:
+                        radial-gradient(ellipse 600px 600px at 15% 20%, rgba(255,167,38,0.35) 0%, transparent 70%),
+                        radial-gradient(ellipse 500px 500px at 80% 35%, rgba(100,180,255,0.3) 0%, transparent 70%),
+                        radial-gradient(ellipse 550px 550px at 50% 75%, rgba(200,80,160,0.3) 0%, transparent 70%);
+                }
+                33% {
+                    background:
+                        radial-gradient(ellipse 650px 550px at 35% 40%, rgba(255,167,38,0.35) 0%, transparent 70%),
+                        radial-gradient(ellipse 550px 600px at 65% 15%, rgba(100,180,255,0.3) 0%, transparent 70%),
+                        radial-gradient(ellipse 500px 600px at 30% 85%, rgba(200,80,160,0.3) 0%, transparent 70%);
+                }
+                66% {
+                    background:
+                        radial-gradient(ellipse 550px 650px at 70% 30%, rgba(255,167,38,0.35) 0%, transparent 70%),
+                        radial-gradient(ellipse 600px 500px at 20% 60%, rgba(100,180,255,0.3) 0%, transparent 70%),
+                        radial-gradient(ellipse 600px 550px at 75% 80%, rgba(200,80,160,0.3) 0%, transparent 70%);
+                }
+                100% {
+                    background:
+                        radial-gradient(ellipse 600px 600px at 50% 15%, rgba(255,167,38,0.35) 0%, transparent 70%),
+                        radial-gradient(ellipse 500px 550px at 85% 55%, rgba(100,180,255,0.3) 0%, transparent 70%),
+                        radial-gradient(ellipse 550px 500px at 15% 70%, rgba(200,80,160,0.3) 0%, transparent 70%);
+                }
+            }
+
             .section-title {
                 color: #ffffff;
                 text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+            }
+
+            .section-desc {
+                color: #d0d0d0;
+                text-shadow: 0 2px 8px rgba(0,0,0,0.7);
+                letter-spacing: 0.3px;
             }
 
             .target-item {
                 background: rgba(0, 0, 0, 0.3);
                 border-left-color: #ffa726;
             }
-
-            .target-item h3 {
-                color: #f5f5f5;
-                text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
-            }
-
-            .target-item p {
-                color: #fffccc;
-            }
+            .target-item h3 { color: #f5f5f5; text-shadow: 2px 2px 4px rgba(0,0,0,0.6); }
+            .target-item h3 .lucide { color: #ffa726; }
+            .target-item p { color: #fffccc; }
 
             .feature-card {
                 background: rgba(0, 0, 0, 0.2);
                 box-shadow: 0 10px 30px rgba(0,0,0,0.4);
                 border-color: transparent;
             }
-            
-            .feature-card:hover {
-                border-color: #ffa726;
-            }
+            .feature-card:hover { border-color: #ffa726; }
+            .feature-card h3 { color: #f5f5f5; text-shadow: 2px 2px 4px rgba(0,0,0,0.6); }
+            .feature-card p { color: #ffcccc; text-shadow: 1px 1px 4px rgba(0,0,0,0.6); }
 
-            .feature-card h3 {
-                color: #f5f5f5;
-                text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+            .new-feature-card {
+                background: rgba(0, 0, 0, 0.25);
+                border-color: rgba(255, 167, 38, 0.3);
             }
+            .new-feature-card h3 { color: #f5f5f5; }
+            .new-feature-card h3 .lucide { color: #ffa726; }
+            .new-feature-card p { color: #d0d0d0; }
+            .new-feature-card .tag { background: linear-gradient(135deg, #ffa726, #e6890b); }
 
-            .feature-card p {
-                color: #ffcccc;
-                text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
-            }
-
-            .philosophy-content {
-                background: rgba(0, 0, 0, 0.2);
-            }
-
-            .philosophy-title {
-                color: #ffffff;
-            }
-
-            .philosophy-text {
-                color: #e0e0e0;
-            }
+            .philosophy-content { background: rgba(0, 0, 0, 0.2); }
+            .philosophy-title { color: #ffffff; }
+            .philosophy-text { color: #e0e0e0; }
 
             .highlight-point {
                 background: rgba(0, 0, 0, 0.25);
                 border-left-color: #87CEEB;
                 box-shadow: 0 5px 15px rgba(0,0,0,0.3);
             }
-            
-            .highlight-point h4 {
-                color: #f5f5f5;
+            .highlight-point h4 { color: #f5f5f5; }
+            .highlight-point h4 .lucide { color: #87CEEB; }
+            .highlight-point p { color: #bdbdbd; }
+
+            .doc-link {
+                background: rgba(0, 0, 0, 0.3);
+                color: #d0d0d0;
+                border-color: rgba(255,255,255,0.15);
+            }
+            .doc-link:hover {
+                background: linear-gradient(135deg, #ffa726, #e6890b);
+                color: white;
             }
 
-            .highlight-point p {
-                color: #bdbdbd;
-            }
-
-            .footer {
-                background: #1c2833;
-            }
+            .footer { background: #1c2833; }
 
             .btn-secondary {
                 background: rgba(255, 255, 255, 0.1);
                 color: #f5f5f5;
                 border-color: rgba(255, 255, 255, 0.2);
             }
-
             .btn-secondary:hover {
                 background: rgba(255, 255, 255, 0.2);
                 color: #ffffff;
@@ -631,7 +889,7 @@
     </style>
 </head>
 <body>
-    <div class="header">
+    <header class="header">
         <div class="inner-header">
             <div class="headerTitleContainer">
                 <span class="forkText">Fork</span>
@@ -639,22 +897,24 @@
                     <span class="sillyText">Silly</span>
                 </span>
             </div>
-            <p class="subtitle">轻量级移动端AIRP应用 - 更简单、更经济</p>
-            
+            <p class="subtitle">Android 移动端 AI 聊天与角色扮演应用</p>
+            <p class="subtitle-secondary">兼容 SillyTavern · 内置 API 模板引擎 · MCP 工具调用 · 图像生成 · 向量记忆</p>
+            <span class="version-badge">v1.27 — 配置档 · MCP 服务 · 数据备份</span>
+
             <div class="action-buttons">
-                <a href="https://github.com/fatsnk/forksilly.doc/releases/latest" class="btn btn-primary btn-icon btn-download" target="_blank">
-                    下载应用
+                <a href="https://github.com/fatsnk/forksilly.doc/releases/latest" class="btn btn-primary" target="_blank">
+                    <i data-lucide="download"></i> 下载应用
                 </a>
-                <a href="https://github.com/fatsnk/forksilly.doc?tab=readme-ov-file#forksilly%E4%BB%8B%E7%BB%8D" class="btn btn-secondary btn-icon btn-about" target="_blank">
-                    关于
+                <a href="https://github.com/fatsnk/forksilly.doc?tab=readme-ov-file#forksilly%E4%BB%8B%E7%BB%8D" class="btn btn-secondary" target="_blank">
+                    <i data-lucide="info"></i> 关于
                 </a>
-                <a href="https://github.com/fatsnk/forksilly.doc/blob/main/moenew.md" class="btn btn-secondary btn-icon btn-help" target="_blank">
-                    帮助文档
+                <a href="#docs" class="btn btn-secondary">
+                    <i data-lucide="book-open"></i> 帮助文档
                 </a>
             </div>
         </div>
-        
-        <!-- Waves Container -->
+
+        <!-- Waves -->
         <div>
             <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
             viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
@@ -662,186 +922,428 @@
                 <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
             </defs>
             <g class="parallax">
-                <use xlink:href="#gentle-wave" x="48" y="0" fill="rgba(255,255,255,0.7" />
+                <use xlink:href="#gentle-wave" x="48" y="0" fill="rgba(255,255,255,0.7)" />
                 <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.5)" />
                 <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0.3)" />
                 <use xlink:href="#gentle-wave" x="48" y="7" fill="#fff" />
             </g>
             </svg>
         </div>
-    </div>
+    </header>
 
-    <div class="main-content">
-        <div class="screenshot-section">
+    <main class="main-content">
+        <canvas class="shards-canvas" id="shardsCanvas"></canvas>
+        <!-- Screenshot Carousel -->
+        <section class="screenshot-section">
             <div class="container">
                 <div class="carousel-container">
                     <div class="carousel">
                         <div class="carousel-item">
-                            <img src="./image/ReferenceImg.jpg" alt="应用界面参考图">
+                            <img src="./image/ReferenceImg.jpg" alt="ForkSilly 聊天界面 - AI角色对话">
                         </div>
                         <div class="carousel-item">
-                            <img src="./image/characterDetail.jpg" alt="角色详情界面">
+                            <img src="./image/characterDetail.jpg" alt="ForkSilly 角色详情编辑界面">
                         </div>
                         <div class="carousel-item">
-                            <img src="./image/themes.jpg" alt="主题设置界面">
+                            <img src="./image/themes.jpg" alt="ForkSilly 主题与样式自定义">
                         </div>
                         <div class="carousel-item">
-                            <img src="./image/characterMemories.jpg" alt="角色记忆界面">
+                            <img src="./image/profile1.jpg" alt="ForkSilly 角色向量记忆系统">
                         </div>
                         <div class="carousel-item">
-                            <img src="./image/memoriesUsePrompt.jpg" alt="记忆提示词界面">
+                            <img src="./image/characterMemories.jpg" alt="ForkSilly 记忆提示词配置">
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
 
         <div class="container">
-            <div class="section">
+            <!-- 适合人群 -->
+            <section class="section">
                 <h2 class="section-title">适合人群</h2>
+                <p class="section-desc">满足移动端 AI 交互需求。</p>
                 <div class="target-grid">
                     <div class="target-item">
-                        <h3>📱 移动端用户</h3>
-                        <p>想在手机上随时游玩，但不想部署傻酒馆或其它web前端</p>
+                        <h3><i data-lucide="smartphone"></i> 移动端用户</h3>
+                        <p>想在手机上随时游玩，不需要部署 SillyTavern 或其它 Web 前端，直接安装apk即可使用</p>
                     </div>
                     <div class="target-item">
-                        <h3>🎭 角色扮演爱好者</h3>
-                        <p>想游玩开源角色卡，与各种角色进行深度对话和互动</p>
+                        <h3><i data-lucide="drama"></i> 角色扮演爱好者</h3>
+                        <p>游玩开源角色卡，与各种角色进行深度对话和互动，支持 SillyTavern V2 格式</p>
                     </div>
                     <div class="target-item">
-                        <h3>💰 成本控制者</h3>
-                        <p>想节省tokens，希望尽量减少API请求，以节省费用但又想进行超长对话</p>
+                        <h3><i data-lucide="piggy-bank"></i> 成本控制者</h3>
+                        <p>每次发送只请求一次 API，节省 tokens 费用，支持免费模型实现零成本对话</p>
                     </div>
                     <div class="target-item">
-                        <h3>🧠 记忆需求者</h3>
-                        <p>希望角色拥有记忆，能够记住之前的对话内容和情感发展</p>
+                        <h3><i data-lucide="brain"></i> 记忆需求者</h3>
+                        <p>基于向量数据库的记忆系统，让角色记住之前的对话内容和情感发展</p>
                     </div>
                     <div class="target-item">
-                        <h3>🎨 图文体验者</h3>
-                        <p>想在聊天中使用Stable Diffusion生成图片，享受图文并茂的对话体验</p>
+                        <h3><i data-lucide="image"></i> 图文体验者</h3>
+                        <p>在聊天中调用 Stable Diffusion 或 pollinations.ai 生成图片，享受图文并茂的对话</p>
                     </div>
                     <div class="target-item">
-                        <h3>⚡ 简化需求者</h3>
-                        <p>不想安装sillytavern、折腾各种插件，希望开箱即用的简洁体验</p>
+                        <h3><i data-lucide="zap"></i> 简化需求者</h3>
+                        <p>不想折腾酒馆的大量第三方插件和配置，喜欢简洁的 AI 聊天体验</p>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <div class="section">
+            <!-- v1.27 新功能亮点 -->
+            <section class="section">
+                <h2 class="section-title">v1.27 新功能亮点</h2>
+                <p class="section-desc">API 模板引擎、MCP 工具调用、配置档系统、数据备份等新功能上线，全面提升 AI 交互体验。</p>
+                <div class="whats-new-grid">
+                    <article class="new-feature-card">
+                        <span class="tag">核心</span>
+                        <h3><i data-lucide="file-json"></i> API 模板引擎</h3>
+                        <p>通过 JSON 配置文件描述任意 LLM API 的请求与响应结构，自动处理 URL 拼接、请求头构建、采样参数映射与流式解析。开箱支持 OpenAI 兼容格式，也可导入自定义模板适配任意 API。</p>
+                    </article>
+                    <article class="new-feature-card">
+                        <span class="tag">核心</span>
+                        <h3><i data-lucide="plug"></i> MCP 服务与工具系统</h3>
+                        <p>支持连接 Streamable HTTP 协议的 MCP 服务，自动获取工具列表并注册。内置内容追加和改写工具；在提示词中添加工具说明后，任何大模型都可在聊天中调用已注册的工具，不依赖模型自身的函数调用能力。</p>
+                    </article>
+                    <article class="new-feature-card">
+                        <span class="tag">新增</span>
+                        <h3><i data-lucide="folder-sync"></i> 配置档系统</h3>
+                        <p>将预设、全局世界书、全局正则等配置的开启状态保存为配置档，在聊天中一键切换不同的环境配置，快速适应不同的对话场景。</p>
+                    </article>
+                    <article class="new-feature-card">
+                        <span class="tag">新增</span>
+                        <h3><i data-lucide="hard-drive-download"></i> 数据备份与迁移</h3>
+                        <p>支持 API 配置的导入导出，以及应用内所有数据和重要配置的完整备份。配合配置档功能，轻松实现数据迁移和环境还原。</p>
+                    </article>
+                    <article class="new-feature-card">
+                        <span class="tag">增强</span>
+                        <h3><i data-lucide="maximize"></i> 聊天图片查看器</h3>
+                        <p>点击聊天气泡下方按钮放大查看原图，文生图时可长按触发大图预览，新增图片保存功能。支持在聊天菜单直接发送本地图片。</p>
+                    </article>
+                    <article class="new-feature-card">
+                        <span class="tag">增强</span>
+                        <h3><i data-lucide="arrow-left-right"></i> 快速切换 API 与模型</h3>
+                        <p>在聊天界面即可快速切换 API 配置和模型，支持备选模型输入框快速扩充模型列表，无需离开对话即可调整。</p>
+                    </article>
+                    <article class="new-feature-card">
+                        <span class="tag">增强</span>
+                        <h3><i data-lucide="scissors"></i> 聊天记录拆分</h3>
+                        <p>长按聊天记录即可触发拆分功能，适用于处理超大型聊天存档，让记录管理更加灵活高效。</p>
+                    </article>
+                    <article class="new-feature-card">
+                        <span class="tag">优化</span>
+                        <h3><i data-lucide="radio-tower"></i> 流式传输优化</h3>
+                        <p>提升了流式响应的稳定性和兼容性，优化了流式思考内容的解析与展示，带来更流畅的对话体验。</p>
+                    </article>
+                </div>
+            </section>
+
+            <!-- 核心优势 -->
+            <section class="section">
                 <h2 class="section-title">核心优势</h2>
+                <p class="section-desc">本地存储保障数据安全，兼容 SillyTavern 文件格式，高度可定制的个性化体验。</p>
                 <div class="features-grid">
                     <div class="feature-card">
-                        <div class="feature-icon">💾</div>
+                        <div class="feature-icon"><i data-lucide="hard-drive"></i></div>
                         <h3>本地数据存储</h3>
-                        <p>所有数据保存在本地，内置存储管理，可导出应用中的资料，数据安全有保障</p>
+                        <p>所有数据保存在本地，内置存储管理与数据备份，可导出应用中的全部资料，数据安全有保障</p>
                     </div>
                     <div class="feature-card">
-                        <div class="feature-icon">🔄</div>
-                        <h3>兼容性强</h3>
-                        <p>支持导入导出sillytavern的角色、预设、世界书、正则、聊天记录</p>
+                        <div class="feature-icon"><i data-lucide="refresh-cw"></i></div>
+                        <h3>SillyTavern 兼容</h3>
+                        <p>支持导入导出 SillyTavern V2 格式的角色卡、预设、世界书、正则表达式与聊天记录</p>
                     </div>
                     <div class="feature-card">
-                        <div class="feature-icon">🎨</div>
+                        <div class="feature-icon"><i data-lucide="palette"></i></div>
                         <h3>个性化定制</h3>
-                        <p>支持导入本地字体、更换聊天背景、调整气泡颜色、字体样式等</p>
+                        <p>导入本地字体、更换聊天背景、调整气泡颜色与字体样式，保存主题配置随时切换</p>
                     </div>
                     <div class="feature-card">
-                        <div class="feature-icon">⭐</div>
+                        <div class="feature-icon"><i data-lucide="star"></i></div>
                         <h3>角色管理</h3>
-                        <p>直观的角色编辑和便捷的角色管理，收藏功能让喜欢的角色位于前排</p>
+                        <p>直观的角色编辑界面，便捷的收藏与管理功能，长按头像即可快速进入编辑</p>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <div class="section">
+            <!-- 核心理念 -->
+            <section class="section">
                 <h2 class="section-title">核心理念</h2>
                 <div class="philosophy-content">
-                    <h3 class="philosophy-title">轻量、快速、经济的AI rolePlay体验</h3>
+                    <h3 class="philosophy-title">轻量、快速、经济的 AI 角色扮演体验</h3>
                     <p class="philosophy-text">
-                        ForkSilly致力于提供坚持轻量、快速的聊天和角色扮演体验，以及实惠、性价比高的API使用方式。
-                        我们相信，优秀的AI对话体验不应该以复杂的配置和高昂的成本为代价。
+                        ForkSilly 致力于提供轻量、快速的聊天和角色扮演体验，以及实惠、高性价比的 API 使用方式。
+                        优秀的 AI 对话体验不应该以复杂的配置和高昂的成本为代价。
                     </p>
-                    
+
                     <div class="highlight-points">
                         <div class="highlight-point">
-                            <h4>⚡ 极速启动</h4>
-                            <p>应用启动迅速，运行流畅，避免云端酒馆服务令人烦躁的载入时间</p>
+                            <h4><i data-lucide="zap"></i> 极速启动</h4>
+                            <p>应用启动迅速，运行流畅，告别云端酒馆令人烦躁的载入等待</p>
                         </div>
                         <div class="highlight-point">
-                            <h4>🎯 高效API调用</h4>
-                            <p>每次发送消息只请求一次LLM API，保证回复速度并减少不必要的额度消耗</p>
+                            <h4><i data-lucide="target"></i> 高效 API 调用</h4>
+                            <p>每次发送消息只请求一次 LLM API，保证回复速度并减少不必要的额度消耗</p>
                         </div>
                         <div class="highlight-point">
-                            <h4>💸 零成本方案</h4>
-                            <p>支持Google Gemini免费模型+siliconflow免费嵌入式模型+Stable Diffusion文生图，实现完全免费的图文记忆对话</p>
+                            <h4><i data-lucide="badge-dollar-sign"></i> 零成本方案</h4>
+                            <p>Gemini 免费模型 + SiliconFlow 免费嵌入 + SD/pollinations.ai 免费图像生成，实现完全免费的多模态对话</p>
                         </div>
                         <div class="highlight-point">
-                            <h4>🧠 智能记忆</h4>
-                            <p>向量检索技术实现角色记忆，让对话更加连贯和个性化</p>
+                            <h4><i data-lucide="brain"></i> 知识库与记忆</h4>
+                            <p>向量检索技术实现角色记忆，支持世界书向量化存储，并支持手动管理记忆，让对话更具个性化</p>
+                        </div>
+                        <div class="highlight-point">
+                            <h4><i data-lucide="wrench"></i> 工具扩展</h4>
+                            <p>通过 MCP 服务连接外部数据源和工具，内置内容追加与改写工具，扩展 AI 的能力边界</p>
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <div class="section">
+            <!-- 技术特色 -->
+            <section class="section">
                 <h2 class="section-title">技术特色</h2>
+                <p class="section-desc">强大的 API 模板引擎、灵活的工具系统、多样的图像生成方案，为移动端 AI 交互提供完整的技术支撑。</p>
                 <div class="features-grid">
                     <div class="feature-card">
-                        <div class="feature-icon">🤖</div>
-                        <h3>多模型支持</h3>
-                        <p>支持接入Gemini、deepseek、硅基流动等多种免费和付费AI模型</p>
+                        <div class="feature-icon"><i data-lucide="cpu"></i></div>
+                        <h3>API 模板引擎</h3>
+                        <p>通过 JSON 模板描述任意 API 结构，自动处理请求构建与流式解析，支持 OpenAI、Claude、Gemini 及自定义接口</p>
                     </div>
                     <div class="feature-card">
-                        <div class="feature-icon">🎭</div>
-                        <h3>纯文字卡支持</h3>
-                        <p>专为纯文字角色卡优化，无需复杂插件即可获得完整体验</p>
+                        <div class="feature-icon"><i data-lucide="plug"></i></div>
+                        <h3>MCP 工具调用</h3>
+                        <p>连接 Streamable HTTP 协议的 MCP 服务，不依赖模型自身的函数调用能力</p>
                     </div>
                     <div class="feature-card">
-                        <div class="feature-icon">🖼️</div>
-                        <h3>图像生成</h3>
-                        <p>支持连接Stable Diffusion文生图API，在聊天中生成图片</p>
+                        <div class="feature-icon"><i data-lucide="image-plus"></i></div>
+                        <h3>多源图像生成</h3>
+                        <p>支持 Stable Diffusion (A1111) API 和 pollinations.ai 免费服务或使用内容追加工具接入任意API，在聊天中生成图片</p>
                     </div>
                     <div class="feature-card">
-                        <div class="feature-icon">🔍</div>
-                        <h3>向量检索</h3>
-                        <p>基于本地向量数据库的记忆检索，让角色记住重要细节</p>
+                        <div class="feature-icon"><i data-lucide="search"></i></div>
+                        <h3>向量记忆检索</h3>
+                        <p>基于本地向量数据库的记忆与知识库系统，支持世界书向量化存储，让角色记住重要细节</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><i data-lucide="file-text"></i></div>
+                        <h3>内容渲染</h3>
+                        <p>渲染 Markdown 内容，支持图片、表格及部分 HTML 标签，可手动切换 WebView 渲染模式</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><i data-lucide="send"></i></div>
+                        <h3>聊天增强</h3>
+                        <p>发送本地图片、快速切换 API 与模型、聊天记录拆分、图片查看器与保存功能</p>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
+            </section>
 
-    <div class="footer">
+            <!-- 文档与资源 -->
+            <section id="docs" class="section">
+                <h2 class="section-title">文档与资源</h2>
+                <p class="section-desc">查阅帮助文档、API 模板仓库和社区讨论，快速上手 ForkSilly。</p>
+                <div class="doc-links">
+                    <a href="https://github.com/fatsnk/forksilly.doc/blob/main/moenew.md" class="doc-link" target="_blank">
+                        <i data-lucide="book-open"></i> 帮助文档
+                    </a>
+                    <a href="https://github.com/fatsnk/forksilly.doc/blob/main/text2img.md" class="doc-link" target="_blank">
+                        <i data-lucide="image"></i> 图片生成
+                    </a>
+                    <a href="https://github.com/fatsnk/forksilly.doc/blob/main/Embedding.md" class="doc-link" target="_blank">
+                        <i data-lucide="brain"></i> 记忆与知识库
+                    </a>
+                    <a href="https://github.com/fatsnk/APItemplateV2?tab=readme-ov-file" class="doc-link" target="_blank">
+                        <i data-lucide="file-json"></i> API 模板引擎
+                    </a>
+                    <a href="https://github.com/fatsnk/forksilly.doc/blob/main/tools.md" class="doc-link" target="_blank">
+                        <i data-lucide="wrench"></i> 工具调用
+                    </a>
+                    <a href="https://github.com/fatsnk/forksilly.doc/discussions/4" class="doc-link" target="_blank">
+                        <i data-lucide="message-circle"></i> 常见问题
+                    </a>
+                    <a href="https://github.com/fatsnk/forksilly.doc/discussions/9" class="doc-link" target="_blank">
+                        <i data-lucide="paintbrush"></i> 常用主题
+                    </a>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
         <div class="container">
             <h3 class="logo">ForkSilly</h3>
             <p>
-                专为移动端优化的AIRP应用<br>
-                让每一次对话都更加智能、经济、有趣<br>
-                <strong>开源 • 免费 • 高效</strong>
+                面向 Android 的 AI 聊天与角色扮演应用<br>
+                兼容 SillyTavern · API 模板引擎 · MCP 工具调用 · 图像生成 · 向量记忆<br>
+                <strong>开源 · 免费 · 轻量 · 高效</strong>
             </p>
         </div>
-    </div>
-    <!-- Visit Tracker Script -->
-<script>
-  (function() {
-    // 防止在本地开发或预览时重复记录
-    if (window.location.hostname === 'localhost' || window.location.protocol === 'file:') {
-      return;
-    }
+    </footer>
 
-    fetch('https://ww2.lifs.ip-ddns.com:2096/gh-stats/api/track', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        referer: document.referrer,
-        user_agent: navigator.userAgent,
-      }),
-      mode: 'cors'
-    }).catch(error => console.error('Error tracking visit:', error));
-  })();
-</script>
+    <!-- Lucide Icons Init -->
+    <script>
+        lucide.createIcons();
+    </script>
+
+    <!-- Crystal Shards Animation -->
+    <script>
+    (function() {
+        const canvas = document.getElementById('shardsCanvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        let W, H;
+        const particles = [];
+        const MAX_PARTICLES = 22;
+        const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+        // 白色、浅蓝、粉色、橙色的颜色池
+        const lightColors = [
+            { r: 255, g: 255, b: 255 },   // 白色
+            { r: 230, g: 245, b: 255 },   // 淡蓝白
+            { r: 200, g: 230, b: 255 },   // 浅蓝
+            { r: 180, g: 220, b: 250 },   // 天蓝
+            { r: 170, g: 210, b: 255 },   // 亮蓝
+            { r: 210, g: 240, b: 255 },   // 冰蓝
+            { r: 255, g: 200, b: 210 },   // 浅粉
+            { r: 255, g: 180, b: 200 },   // 粉色
+            { r: 250, g: 170, b: 190 },   // 玫瑰粉
+            { r: 247, g: 151, b: 29 },    // 主题橙
+            { r: 255, g: 180, b: 100 },   // 浅橙
+            { r: 238, g: 160, b: 80 },    // 暖橙
+        ];
+        const darkColors = [
+            { r: 180, g: 220, b: 255 },   // 浅蓝
+            { r: 200, g: 235, b: 255 },   // 冰蓝
+            { r: 160, g: 200, b: 255 },   // 天蓝
+            { r: 220, g: 240, b: 255 },   // 淡蓝白
+            { r: 255, g: 180, b: 200 },   // 粉色
+            { r: 250, g: 160, b: 185 },   // 玫瑰粉
+            { r: 255, g: 200, b: 210 },   // 浅粉
+            { r: 255, g: 167, b: 38 },    // 主题橙
+            { r: 255, g: 190, b: 110 },   // 浅橙
+            { r: 240, g: 150, b: 70 },    // 暖橙
+        ];
+
+        function resize() {
+            W = canvas.offsetWidth;
+            H = canvas.offsetHeight;
+            canvas.width = W * devicePixelRatio;
+            canvas.height = H * devicePixelRatio;
+            ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+        }
+        resize();
+        window.addEventListener('resize', resize);
+
+        function randomPolygon(cx, cy, r, sides) {
+            const pts = [];
+            for (let i = 0; i < sides; i++) {
+                const angle = (Math.PI * 2 / sides) * i + Math.random() * 0.6 - 0.3;
+                const dist = r * (0.6 + Math.random() * 0.4);
+                pts.push({ x: cx + Math.cos(angle) * dist, y: cy + Math.sin(angle) * dist });
+            }
+            return pts;
+        }
+
+        function pickColor() {
+            const pool = isDark ? darkColors : lightColors;
+            return pool[Math.floor(Math.random() * pool.length)];
+        }
+
+        function createParticle() {
+            const sides = 4 + Math.floor(Math.random() * 3);
+            const size = 5 + Math.random() * 12;
+            const pts = randomPolygon(0, 0, size, sides);
+            const color = pickColor();
+            return {
+                x: Math.random() * W,
+                y: -10 - Math.random() * 30,
+                pts: pts,
+                vy: 0.3 + Math.random() * 0.6,
+                vx: (Math.random() - 0.5) * 0.3,
+                rotation: Math.random() * Math.PI * 2,
+                rotSpeed: (Math.random() - 0.5) * 0.02,
+                sway: Math.random() * Math.PI * 2,
+                swaySpeed: 0.005 + Math.random() * 0.01,
+                swayAmp: 0.3 + Math.random() * 0.5,
+                opacity: 0.35 + Math.random() * 0.4,
+                color: color,
+                life: 0,
+            };
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, W, H);
+
+            while (particles.length < MAX_PARTICLES) {
+                particles.push(createParticle());
+            }
+
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const p = particles[i];
+                p.life++;
+                p.sway += p.swaySpeed;
+                p.x += p.vx + Math.sin(p.sway) * p.swayAmp;
+                p.y += p.vy;
+                p.rotation += p.rotSpeed;
+
+                // 顶部不透明度更高，越往下越透明
+                const progress = Math.max(0, p.y / H);
+                const fadeOut = 1 - progress * progress;
+                const alpha = p.opacity * fadeOut;
+
+                if (alpha <= 0.01 || p.y > H + 20) {
+                    particles.splice(i, 1);
+                    continue;
+                }
+
+                const c = p.color;
+                ctx.save();
+                ctx.translate(p.x, p.y);
+                ctx.rotate(p.rotation);
+                ctx.globalAlpha = alpha;
+
+                ctx.beginPath();
+                ctx.moveTo(p.pts[0].x, p.pts[0].y);
+                for (let j = 1; j < p.pts.length; j++) {
+                    ctx.lineTo(p.pts[j].x, p.pts[j].y);
+                }
+                ctx.closePath();
+
+                ctx.fillStyle = 'rgba(' + c.r + ',' + c.g + ',' + c.b + ',0.6)';
+                ctx.strokeStyle = 'rgba(' + c.r + ',' + c.g + ',' + c.b + ',0.85)';
+                ctx.lineWidth = 0.8;
+                ctx.fill();
+                ctx.stroke();
+
+                ctx.restore();
+            }
+
+            requestAnimationFrame(draw);
+        }
+
+        draw();
+    })();
+    </script>
+
+    <!-- Visit Tracker Script -->
+    <script>
+    (function() {
+        if (window.location.hostname === 'localhost' || window.location.protocol === 'file:') {
+            return;
+        }
+        fetch('https://ww2.lifs.ip-ddns.com:2096/gh-stats/api/track', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                referer: document.referrer,
+                user_agent: navigator.userAgent,
+            }),
+            mode: 'cors'
+        }).catch(error => console.error('Error tracking visit:', error));
+    })();
+    </script>
 
 </body>
 </html>
