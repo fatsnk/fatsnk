@@ -180,7 +180,47 @@
             align-items: center;
             border-radius: 5px;
             padding: 12px;
+        }
+
+        /* Logo 轮播 */
+        .logoCarousel {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 80px;
+            min-width: 200px;
             margin-bottom: 1rem;
+        }
+
+        .logoCarousel-item {
+            position: absolute;
+            opacity: 0;
+            transform: scale(1.1);
+            filter: blur(8px);
+            transition: opacity 0.8s ease, transform 0.8s ease, filter 0.8s ease;
+            pointer-events: none;
+        }
+
+        .logoCarousel-item.active {
+            position: relative;
+            opacity: 1;
+            transform: scale(1);
+            filter: blur(0);
+            pointer-events: auto;
+        }
+
+        .logoCarousel-item.leaving {
+            opacity: 0;
+            transform: scale(0.8);
+            filter: blur(8px);
+        }
+
+        .logoCarousel-img {
+            max-height: 120px;
+            width: auto;
+            object-fit: contain;
+            border-radius: 5px;
         }
         .forkText {
             color: #ff9e7d;
@@ -759,6 +799,7 @@
                 background-size: 1000% 1000%;
             }
             .forkText, .sillyText { font-size: 2.5rem; }
+            .logoCarousel-img { max-height: 80px; }
             .logo { font-size: 2.5rem; }
             .subtitle { font-size: 1.1rem; }
             .waves { height:40px; min-height:40px; }
@@ -891,11 +932,25 @@
 <body>
     <header class="header">
         <div class="inner-header">
-            <div class="headerTitleContainer">
-                <span class="forkText">Fork</span>
-                <span class="sillyContainer">
-                    <span class="sillyText">Silly</span>
-                </span>
+            <!-- Logo 轮播容器 -->
+            <div class="logoCarousel" id="logoCarousel">
+                <div class="logoCarousel-item active" data-index="0">
+                    <img src="./image/logo1.png" alt="ForkSilly Logo 1" class="logoCarousel-img">
+                </div>
+                <div class="logoCarousel-item" data-index="1">
+                    <img src="./image/logo2.png" alt="ForkSilly Logo 2" class="logoCarousel-img">
+                </div>
+                <div class="logoCarousel-item" data-index="2">
+                    <img src="./image/logo3.png" alt="ForkSilly Logo 3" class="logoCarousel-img">
+                </div>
+                <div class="logoCarousel-item" data-index="3">
+                    <div class="headerTitleContainer">
+                        <span class="forkText">Fork</span>
+                        <span class="sillyContainer">
+                            <span class="sillyText">Silly</span>
+                        </span>
+                    </div>
+                </div>
             </div>
             <p class="subtitle">Android 移动端 AI 聊天与角色扮演应用</p>
             <p class="subtitle-secondary">兼容 SillyTavern · 内置 API 模板引擎 · MCP 工具调用 · 图像生成 · 向量记忆</p>
@@ -1185,6 +1240,46 @@
     <!-- Lucide Icons Init -->
     <script>
         lucide.createIcons();
+    </script>
+
+    <!-- Logo Carousel -->
+    <script>
+    (function () {
+        var carousel = document.getElementById('logoCarousel');
+        if (!carousel) return;
+
+        var items = carousel.querySelectorAll('.logoCarousel-item');
+        var count = items.length;
+        if (count <= 1) return;
+
+        var currentIndex = 0;
+        var INTERVAL = 5000;
+        var TRANSITION = 800;
+
+        function getRandomNext(current) {
+            var next;
+            do { next = Math.floor(Math.random() * count); } while (next === current);
+            return next;
+        }
+
+        function switchTo(nextIndex) {
+            var currentItem = items[currentIndex];
+            var nextItem = items[nextIndex];
+
+            currentItem.classList.remove('active');
+            currentItem.classList.add('leaving');
+
+            setTimeout(function () {
+                currentItem.classList.remove('leaving');
+                nextItem.classList.add('active');
+                currentIndex = nextIndex;
+            }, TRANSITION * 0.4);
+        }
+
+        setInterval(function () {
+            switchTo(getRandomNext(currentIndex));
+        }, INTERVAL);
+    })();
     </script>
 
     <!-- Crystal Shards Animation -->
