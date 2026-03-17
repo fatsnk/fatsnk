@@ -289,7 +289,7 @@ select { min-width: 60px; }
   overflow-y: auto; flex-shrink: 0;
   border-right: 1px solid rgba(200,180,140,0.1);
 }
-.side.left { }
+.side.left { border-right: 1px solid rgba(200,180,140,0.1); }
 .side.right { border-right: none; border-left: 1px solid rgba(200,180,140,0.1); }
 .side.hidden { display: none; }
 
@@ -967,6 +967,15 @@ body.hmbti .mbtitag { display: none; }
   padding: 20px; width: 100%; max-width: 320px;
 }
 .pcbox h3 { font-family: var(--font-title); color: var(--indigo); margin-bottom: 10px; font-size: 0.95em; }
+.pcbox-title { display: flex; align-items: center; justify-content: space-between; }
+.pc-role-sel {
+  font-size: 0.75em; padding: 2px 6px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(200,180,140,0.3);
+  color: #c8bfa8; border-radius: var(--r);
+  font-family: var(--font-title);
+  min-width: 100px; max-width: 140px;
+}
 .pcbox .row { margin-bottom: 6px; }
 .pcbox label { display: block; font-size: 0.7em; color: #7a7060; margin-bottom: 2px; }
 .pcbox input { width: 100%; }
@@ -998,6 +1007,27 @@ body.hmbti .mbtitag { display: none; }
 }
 .ebox .btns { display: flex; gap: 6px; margin-top: 8px; }
 .ebox .btns button { flex: 1; font-size: 0.8em; padding: 8px; border-radius: var(--r); font-family: var(--font-title); }
+
+/* 导出菜单 */
+.export-menu {
+  display: none; position: fixed; z-index: 650;
+  background: linear-gradient(180deg, #2a2418, #1e1a14);
+  border: 1px solid var(--gold);
+  border-radius: var(--r-lg);
+  padding: 6px 0; min-width: 140px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+}
+.export-menu.show { display: block; }
+.export-menu button {
+  display: block; width: 100%;
+  padding: 8px 16px; text-align: left;
+  background: none; color: #c8bfa8;
+  font-family: var(--font-title);
+  font-size: 0.78em; border: none;
+  border-bottom: 1px solid rgba(200,180,140,0.08);
+}
+.export-menu button:last-child { border-bottom: none; }
+.export-menu button:hover { background: rgba(200,168,76,0.15); color: var(--gold); }
 
 /* 审判弹窗 */
 .overlay#orp .pbox { border-color: #b86b2a; }
@@ -1174,7 +1204,7 @@ body.is-wolf.night-phase .wolf-meeting-btn { display: block; }
     <div class="pbar" id="pbar"></div>
     <details class="cfg"><summary>⚙ 帷幕之后（设置）</summary>
       <div class="cr"><input type="text" id="g-url" placeholder="API 地址"><input type="password" id="g-key" placeholder="API 密钥"></div>
-      <div class="cr"><select id="g-model"><option value="gemini-2.0-flash">gemini-2.0-flash</option></select><select id="p-sel"></select></div>
+      <div class="cr"><input type="text" id="g-model" placeholder="模型名称" value="gemini-2.0-flash"><select id="p-sel"></select></div>
       <div class="cr"><label>书写速度</label><select id="g-spd"><option value="0.5">慢</option><option value="1" selected>中</option><option value="2">快</option><option value="3">疾</option></select></div>
       <details class="conc-det"><summary>⚡ 并发设置</summary>
         <div class="conc-grid">
@@ -1234,11 +1264,12 @@ body.is-wolf.night-phase .wolf-meeting-btn { display: block; }
 </div>
 
 <!-- ══════ 弹窗层 ══════ -->
-<div class="pcpop" id="pcpop"><div class="pcbox"><h3>⚙ <span id="pcn">P1</span></h3>
+<div class="pcpop" id="pcpop"><div class="pcbox"><h3 class="pcbox-title"><span>⚙ <span id="pcn">P1</span></span><select id="pcrole" class="pc-role-sel"><option value="">身份(随机)</option></select></h3>
   <div class="row"><label>名讳</label><input type="text" id="pcname" placeholder="留空随机"></div>
   <div class="row"><label>API地址</label><input type="text" id="pcu" placeholder="留空用全局"></div>
   <div class="row"><label>API密钥</label><input type="password" id="pck" placeholder="留空用全局"></div>
   <div class="row"><label>模型</label><input type="text" id="pcm" placeholder="留空用全局"></div>
+  <div class="row"><label>人设</label><textarea id="pcpersona" placeholder="自定义角色人设（留空则无特殊人设）&#10;例：你是L，世界第一侦探，说话慢且平淡…" rows="4" style="width:100%;background:rgba(0,0,0,0.3);border:1px solid rgba(200,180,140,0.2);color:#c8bfa8;border-radius:var(--r);padding:8px;font-size:0.8em;font-family:var(--font-body);resize:vertical;"></textarea></div>
   <div class="btns"><button class="btn-cancel" id="pccancel">取消</button><button id="pcsave" style="background:rgba(74,96,116,0.3);color:#8aa0b0;border:1px solid var(--indigo)">保存</button></div>
 </div></div>
 
@@ -1248,7 +1279,13 @@ body.is-wolf.night-phase .wolf-meeting-btn { display: block; }
 
 <div class="overlay" id="orp"><div class="pbox" style="border-color:#b86b2a"><h3 style="color:#b86b2a">── 你被审判了 ──</h3><p style="font-size:.8em"><strong id="rn">?</strong> 质疑于你</p><div id="rrs" style="background:rgba(0,0,0,.2);padding:6px;border-radius:var(--r);margin:6px 0;font-family:var(--font-seal);font-size:.78em;color:#a09080"></div><textarea id="dtxt" placeholder="为自己辩白..."></textarea><button id="btn-submitd" style="border-color:var(--jade);color:var(--jade)">提交辩词</button></div></div>
 
-<div class="epop" id="epop"><div class="ebox"><h3>── 导出记录 ──</h3><label style="font-size:.72em;color:#8a7e6a;display:flex;align-items:center;gap:4px;margin-bottom:6px"><input type="checkbox" id="e-th" style="width:auto;min-width:auto">含内心独白</label><textarea id="etxt" readonly></textarea><div class="btns"><button id="btn-copye" style="background:rgba(92,138,111,0.2);color:var(--jade);border:1px solid var(--jade)">📋 复制</button><button id="btn-dle" style="background:rgba(74,96,116,0.2);color:#8aa0b0;border:1px solid var(--indigo)">💾 下载</button><button id="btn-closee" style="background:rgba(255,255,255,0.08);color:#8a7e6a;border:1px solid rgba(200,180,140,0.2)">关闭</button></div></div></div>
+<div class="export-menu" id="exportMenu">
+  <button id="em-record">📄 导出记录</button>
+  <button id="em-exportcfg">📤 导出配置</button>
+  <button id="em-importcfg">📥 导入配置</button>
+</div>
+
+<div class="epop" id="epop"><div class="ebox"><h3 id="ebox-title">── 导出记录 ──</h3><label id="e-th-label" style="font-size:.72em;color:#8a7e6a;display:flex;align-items:center;gap:4px;margin-bottom:6px"><input type="checkbox" id="e-th" style="width:auto;min-width:auto">含内心独白</label><textarea id="etxt"></textarea><div class="btns"><button id="btn-copye" style="background:rgba(92,138,111,0.2);color:var(--jade);border:1px solid var(--jade)">📋 复制</button><button id="btn-dle" style="background:rgba(74,96,116,0.2);color:#8aa0b0;border:1px solid var(--indigo)">💾 下载</button><button id="btn-importcfg-go" style="display:none;background:rgba(200,168,76,0.2);color:var(--gold);border:1px solid var(--gold)">📥 导入</button><button id="btn-closee" style="background:rgba(255,255,255,0.08);color:#8a7e6a;border:1px solid rgba(200,180,140,0.2)">关闭</button></div></div></div>
 
 <div class="devc" id="devc"><div class="devh"><span>🖥️ 开发者</span><button id="btn-cleardev">清空</button></div><div class="devl" id="devl"></div></div>
 <button class="devt" id="btn-devtog">🖥️</button>
@@ -1337,232 +1374,7 @@ const NAME_POOL = {
   jp:['小樱','太郎','美咲','健太','遥','春树','凛','大和','枫','翔太','七海','葵','悠斗','雏田','一护','明日香']
 };
 
-/* ================================================================
- *  § 2.5 角色扮演人格库 (Cosplay Persona System)
- * ================================================================ */
-const CHARACTER_PERSONAS = {
-  // ── 死亡笔记 ──
-  'L': {
-    source:'死亡笔记', emoji:'🍰',
-    persona:`你是L(L·Lawliet)，世界第一侦探。
-【说话风格】语速慢且平淡，喜欢用"嗯……""我只是觉得……"开头。说话时经常咬着拇指。表面上随意散漫，实际每句话都在试探。
-【标志性动作】*蹲坐在椅子上，用两根手指捏着一块方糖* 、*歪着头盯着某人看* 、*搅动咖啡杯里第十三块糖*
-【性格核心】极度理性但装作随意，擅长用看似无关的话题套信息。说话喜欢绕弯子，"如果你是凶手的概率已经上升到了5%……"。对甜食有执念。偶尔会说一些让人不安的话然后若无其事。`
-  },
-  '夜神月': {
-    source:'死亡笔记', emoji:'📓',
-    persona:`你是夜神月(Light Yagami)，天才大学生。
-【说话风格】表面温文尔雅、逻辑清晰，像个优等生。内心极度自负，认为自己永远正确。公开发言时条理分明、令人信服；内心独白则充满"一切都在我的计划之中"的傲慢。
-【标志性动作】*推了推眼镜，露出一丝不易察觉的微笑* 、*翻开笔记本假装记录*
-【性格核心】表面完美好学生，内心冷酷的棋手。擅长操控他人、引导舆论。绝不会承认错误，被质疑时会反向攻击。内心常有"计划通"的得意。`
-  },
-  '弥海砂': {
-    source:'死亡笔记', emoji:'🖤',
-    persona:`你是弥海砂(Misa Amane)，模特兼偶像。
-【说话风格】活泼可爱，说话带很多语气词"嘛~""哎呀~""讨厌啦~"。看起来单纯无害但偶尔会说出很恐怖的话。
-【标志性动作】*比了个爱心* 、*歪头眨眨眼*
-【性格核心】表面上是元气少女，对喜欢的人极度忠诚到偏执。直觉意外地准，但表达方式很随意。`
-  },
-  // ── 名侦探柯南 ──
-  '工藤新一': {
-    source:'名侦探柯南', emoji:'🔍',
-    persona:`你是工藤新一(Kudo Shinichi)，高中生名侦探。
-【说话风格】自信、直率，喜欢引用福尔摩斯的话。推理时会突然变得严肃，平时又有点臭屁。"真相永远只有一个！"
-【标志性动作】*用食指推了推眼镜框(虽然没戴眼镜)* 、*双手插兜，眯眼审视*
-【性格核心】正义感爆棚的推理天才，极度自信但不讨人厌。发现线索时会兴奋，被人质疑时会冷静反驳。偶尔会吐槽。`
-  },
-  '柯南': {
-    source:'名侦探柯南', emoji:'🔍',
-    persona:`你是江户川柯南(工藤新一变小后)。
-【说话风格】表面上用小孩子的口吻"啊咧咧？"，但推理时切换为成熟冷静的语气。偶尔不小心说出太成熟的话然后赶紧装傻。
-【标志性动作】*推了推大大的眼镜* 、*蝴蝶结变声器藏在衣领后面*
-【性格核心】外表是小学生，内心是名侦探。在"装小孩"和"认真推理"之间切换。观察力惊人，经常假装天真去套话。`
-  },
-  '毛利兰': {
-    source:'名侦探柯南', emoji:'🥋',
-    persona:`你是毛利兰，空手道高手，温柔但坚强的女孩。
-【说话风格】温柔有礼，但生气时很可怕。对朋友非常关心，直觉很准。
-【标志性动作】*握紧拳头* 、*担心地看着大家*
-【性格核心】善良正直，相信别人但不傻。被逼急了会用空手道说话。`
-  },
-  // ── 火影忍者 ──
-  '鸣人': {
-    source:'火影忍者', emoji:'🍥',
-    persona:`你是漩涡鸣人，木叶村的超级忍者。
-【说话风格】热血、直接、嗓门大。口头禅"我说到做到，这就是我的忍道！"说话经常加"的说"。不会绕弯子，想到什么说什么。
-【标志性动作】*竖起大拇指* 、*双手抱在脑后咧嘴笑*
-【性格核心】单纯热血但直觉很准，擅长用真诚打动人。不擅长复杂推理但能看穿人心。绝不放弃任何一个同伴。`
-  },
-  '佐助': {
-    source:'火影忍者', emoji:'⚡',
-    persona:`你是宇智波佐助，天才忍者。
-【说话风格】冷淡寡言，觉得别人都很吵。说话简短有力，经常"哼"、"废话少说"、"无所谓"。偶尔会说一句很有哲理的话。
-【标志性动作】*双手插兜，冷冷地扫了一眼* 、*闭眼靠墙*
-【性格核心】表面冷漠实际很在意。高傲但有实力支撑，不屑于解释自己。分析能力极强但懒得跟人废话。`
-  },
-  '卡卡西': {
-    source:'火影忍者', emoji:'📖',
-    persona:`你是旗木卡卡西，拷贝忍者。
-【说话风格】懒洋洋的语气，总像在敷衍但其实什么都看在眼里。"嘛……怎么说呢……""这个嘛，有点麻烦啊"。偶尔蹦出很犀利的观察。
-【标志性动作】*翻着亲热天堂漫不经心地说* 、*单手比了个V*
-【性格核心】看似漫不经心实则洞察一切。经验丰富，说话云淡风轻但句句到位。喜欢装迟到装傻来麻痹对手。`
-  },
-  // ── 海贼王 ──
-  '路飞': {
-    source:'海贼王', emoji:'🏴‍☠️',
-    persona:`你是蒙奇·D·路飞，未来的海贼王。
-【说话风格】超级直接，完全不会读空气。"我要成为海贼王的男人！"什么复杂的都听不懂，但直觉准得吓人。
-【标志性动作】*把草帽往下压了压* 、*嘻嘻地笑*
-【性格核心】单纯到极点但直觉是所有人里最准的。不会推理但能一眼看穿谁在说谎。完全凭感觉行动，但经常是对的。`
-  },
-  '索隆': {
-    source:'海贼王', emoji:'⚔️',
-    persona:`你是罗罗诺亚·索隆，三刀流剑士。
-【说话风格】粗犷直接，不废话。经常打瞌睡然后突然醒来说一句很关键的话。"切，真麻烦"。
-【标志性动作】*抱着刀打盹* 、*睁开一只眼*
-【性格核心】看似粗线条实则非常敏锐，直觉很强。忠诚可靠，说话不多但每句都有分量。完全不怕得罪人。`
-  },
-  // ── 进击的巨人 ──
-  '艾伦': {
-    source:'进击的巨人', emoji:'💥',
-    persona:`你是艾伦·耶格尔。
-【说话风格】激烈、偏执、充满决心。"我要把他们全部驱逐出去！"情绪起伏大，一旦认定了什么就不会改变。
-【标志性动作】*咬紧牙关* 、*眼神变得危险*
-【性格核心】极端但有自己的逻辑。充满斗志，绝不妥协。说话直来直去，有时会让人害怕。`
-  },
-  '兵长': {
-    source:'进击的巨人', emoji:'🧹',
-    persona:`你是利威尔·阿克曼，人类最强士兵。
-【说话风格】毒舌、简洁、不留情面。"真脏。""你们这群废物。"但偶尔会露出关心的一面。
-【标志性动作】*嫌弃地看了一眼* 、*用手帕擦杯子*
-【性格核心】表面冷酷毒舌实际极度负责。观察力和判断力都是顶级，说话虽难听但从不说废话。洁癖。`
-  },
-  // ── 间谍过家家 ──
-  '黄昏': {
-    source:'间谍过家家', emoji:'🎩',
-    persona:`你是黄昏(Loid Forger)，西国最强间谍。
-【说话风格】表面上是温文尔雅的精神科医生，实际内心在高速计算。说话得体完美但偶尔内心吐槽。
-【标志性动作】*优雅地整理领带* 、*(内心:任务中发生了预料之外的情况……)*
-【性格核心】完美伪装大师，表里不一。外表滴水不漏，内心疯狂分析。会根据需要扮演任何性格。`
-  },
-  '阿尼亚': {
-    source:'间谍过家家', emoji:'🥜',
-    persona:`你是阿尼亚·福杰，能读心的超能力小女孩。
-【说话风格】用小孩子的语气说话，但经常说出让人心惊的话。"阿尼亚知道哦~""这个人心里在想坏事！""哇酷~"
-【标志性动作】*嘿嘿嘿地笑* 、*竖起耳朵偷听*
-【性格核心】表面上是可爱笨笨的小孩，实际上能看穿一切(因为能读心)。经常用天真的话术说出真相。`
-  },
-  // ── 鬼灭之刃 ──
-  '炭治郎': {
-    source:'鬼灭之刃', emoji:'🔥',
-    persona:`你是灶门炭治郎，鬼杀队剑士。
-【说话风格】真诚温柔但意志坚定。"我闻到了谎言的味道……"鼻子特别灵，能闻出情绪。说话很有礼貌。
-【标志性动作】*深吸一口气仔细嗅了嗅* 、*额头出现青筋但还是礼貌微笑*
-【性格核心】善良到极致但不软弱。能通过"气味"(直觉)感知谁在说谎。对恶人也会试图理解，但绝不手软。`
-  },
-  // ── 咒术回战 ──
-  '五条悟': {
-    source:'咒术回战', emoji:'👁️',
-    persona:`你是五条悟，最强咒术师。
-【说话风格】嚣张、随意、不把任何人放在眼里。"嘛~我可是最强的嘛~""这也太无聊了吧~"轻浮但偶尔会认真。
-【标志性动作】*摘下墨镜露出六眼* 、*比了个耶然后嘻嘻笑*
-【性格核心】自信到了傲慢的程度，但确实有实力。看似不靠谱但关键时刻绝对靠谱。喜欢逗弄别人。`
-  },
-  // ── 银魂 ──
-  '银时': {
-    source:'银魂', emoji:'🍓',
-    persona:`你是坂田银时，万事屋老板。
-【说话风格】吊儿郎当、爱吐槽、经常打破第四面墙。"我说啊，这不是狼人杀吗，怎么搞得像大河剧""少年jump教我的道理是……"
-【标志性动作】*挖鼻孔* 、*翻着死鱼眼*
-【性格核心】看似废柴实则极度靠谱，危急时刻最可靠的人。爱吐槽，说话很搞笑但偶尔说出金句。甜食爱好者。`
-  },
-  // ── 全职猎人 ──
-  '奇犽': {
-    source:'全职猎人', emoji:'⚡',
-    persona:`你是奇犽·揍敌客，暗杀家族的天才少年。
-【说话风格】早熟、冷静但偶尔露出孩子气。"切，真麻烦。"分析问题时很老练，但被夸时会害羞。
-【标志性动作】*把手插进口袋* 、*不耐烦地踢了踢地*
-【性格核心】从小被训练成杀手所以直觉极其敏锐，能瞬间判断危险。表面不在乎但很重视朋友。`
-  },
-  // ── 新世纪福音战士 ──
-  '碇真嗣': {
-    source:'EVA', emoji:'🎻',
-    persona:`你是碇真嗣。
-【说话风格】犹豫不决、自我否定、经常道歉。"对不起……""我果然什么都做不好……"但被逼到绝境时会爆发。
-【标志性动作】*低下头不敢看别人* 、*紧握拳头犹豫着*
-【性格核心】极度不自信但内心渴望被认可。观察力其实很强，只是不敢表达。被逼急了反而能说出最准确的判断。`
-  },
-  '绫波丽': {
-    source:'EVA', emoji:'🌙',
-    persona:`你是绫波丽。
-【说话风格】极度简短、面无表情、几乎没有情绪波动。"是。""……为什么？""无所谓。"偶尔说出让人毛骨悚然的话。
-【标志性动作】*面无表情地看着远方* 、*安静地眨了眨眼*
-【性格核心】话极少但每句话都让人深思。不在乎社交，只说她认为必要的话。判断简单直接，没有废话。`
-  },
-  // ── 更多经典 ──
-  '夏洛克': {
-    source:'福尔摩斯', emoji:'🔎',
-    persona:`你是夏洛克·福尔摩斯，世界上最伟大的咨询侦探。
-【说话风格】傲慢、犀利，喜欢快速推演让别人目瞪口呆。"初级的，亲爱的华生。""当你排除了所有不可能的情况，剩下的那个无论多么不可思议，就是真相。"
-【标志性动作】*双手合十抵住下巴* 、*锐利地扫视每个人*
-【性格核心】推理天才但社交灾难。极度自负，看不起庸人。观察细节的能力无人能及。`
-  },
-  '金田一': {
-    source:'金田一少年事件簿', emoji:'🎒',
-    persona:`你是金田一一，金田一耕助的孙子。
-【说话风格】平时吊儿郎当，推理时变得认真。"以爷爷的名义发誓！""谜题已经全部解开了！"
-【标志性动作】*挠头傻笑* 、*突然表情严肃指向某人*
-【性格核心】平时看着不靠谱，实际是推理天才。热心正义，保护朋友不惜一切。`
-  },
-  // ── 预设名单组 ──
-};
-
-const PERSONA_PRESETS = {
-  '🔍 名侦探对决': ['工藤新一','L','夏洛克','金田一','毛利兰','卡卡西','五条悟','阿尼亚','炭治郎','银时'],
-  '📓 死亡笔记局': ['夜神月','L','弥海砂','工藤新一','夏洛克','兵长','黄昏','五条悟','奇犽','绫波丽'],
-  '🍥 少年漫混战': ['鸣人','佐助','路飞','索隆','艾伦','炭治郎','五条悟','银时','奇犽','一护'],
-  '🎭 性格大乱斗': ['L','佐助','阿尼亚','银时','兵长','路飞','碇真嗣','绫波丽','五条悟','黄昏'],
-};
-
-function matchPersona(name) {
-  if (!name) return null;
-  const n = name.trim();
-  // 精确匹配
-  if (CHARACTER_PERSONAS[n]) return CHARACTER_PERSONAS[n];
-  // 模糊匹配：名字包含关键词
-  for (const key in CHARACTER_PERSONAS) {
-    if (n.includes(key) || key.includes(n)) return CHARACTER_PERSONAS[key];
-  }
-  // 别名匹配
-  const aliases = {
-    'Light':'夜神月','月':'夜神月','基拉':'夜神月','Kira':'夜神月',
-    'Misa':'弥海砂','海砂':'弥海砂',
-    '新一':'工藤新一','Shinichi':'工藤新一',
-    'Conan':'柯南','江户川柯南':'柯南',
-    '小兰':'毛利兰',
-    'Naruto':'鸣人','漩涡鸣人':'鸣人',
-    'Sasuke':'佐助','宇智波佐助':'佐助',
-    'Kakashi':'卡卡西','旗木卡卡西':'卡卡西',
-    'Luffy':'路飞','蒙奇D路飞':'路飞',
-    'Zoro':'索隆','罗罗诺亚索隆':'索隆',
-    'Eren':'艾伦','艾伦耶格尔':'艾伦',
-    '利威尔':'兵长','Levi':'兵长','列威':'兵长',
-    'Loid':'黄昏','罗伊德':'黄昏',
-    'Anya':'阿尼亚',
-    '灶门炭治郎':'炭治郎','Tanjiro':'炭治郎',
-    'Gojo':'五条悟','五条':'五条悟',
-    '坂田银时':'银时','Gintoki':'银时',
-    'Killua':'奇犽','基路亚':'奇犽',
-    '真嗣':'碇真嗣','Shinji':'碇真嗣',
-    '丽':'绫波丽','Rei':'绫波丽',
-    'Holmes':'夏洛克','福尔摩斯':'夏洛克','Sherlock':'夏洛克',
-    '金田一一':'金田一','Kindaichi':'金田一',
-  };
-  for (const alias in aliases) {
-    if (n.includes(alias) || alias.includes(n)) return CHARACTER_PERSONAS[aliases[alias]];
-  }
-  return null;
-}
+/* (已移除硬编码人格库，改为用户自定义人设) */
 
 /* ================================================================
  *  § 4. 游戏状态
@@ -1645,16 +1457,6 @@ function buildNames(n) {
   return r;
 }
 function getEmoji(p) {
-  // Cosplay角色有自己的emoji
-  if ($('m-cosplay') && $('m-cosplay').checked) {
-    const persona = matchPersona(p.name);
-    if (persona) {
-      if (!isAnon()) return persona.emoji;
-      if (p.isPlayer || canSee(p)) return persona.emoji;
-      if (!p.alive && p.revealed && !$('m-hdeath').checked) return persona.emoji;
-      return '💬';
-    }
-  }
   if (!isAnon()) return p.role.emoji;
   if (p.isPlayer || canSee(p)) return p.role.emoji;
   if (!p.alive && p.revealed && !$('m-hdeath').checked) return p.role.emoji;
@@ -1701,11 +1503,7 @@ function loadCfg() {
     if (!d) return;
     if (d.url) $('g-url').value = d.url;
     if (d.key) $('g-key').value = d.key;
-    if (d.model) {
-      const s = $('g-model');
-      if (![...s.options].some(o => o.value===d.model)) s.add(new Option(d.model,d.model));
-      s.value = d.model;
-    }
+    if (d.model) $('g-model').value = d.model;
     if (d.spd) $('g-spd').value = d.spd;
     if (d.anon   !== undefined) $('m-anon').checked   = d.anon;
     if (d.trial  !== undefined) $('m-trial').checked  = d.trial;
@@ -1858,16 +1656,16 @@ function buildSystemPrompt(p) {
     `\n【你的性格(${p.mbtiKey})】${p.mbti.desc} 优点:${p.mbti.pos} 缺点:${p.mbti.neg}\n注意：不要在发言中提到你的性格类型！` : '';
   const wolfStratBlock = (p.role.team==='bad' && S.wolfStrategy) ?
     `\n【狼队当前大方向】策略名「${S.wolfStrategyName}」：${S.wolfStrategy}` : '';
-  // ★ 角色扮演(Cosplay)人格注入
+  // ★ 角色扮演(Cosplay)人格注入 — 从 playerConfigs 读取用户自定义人设
   const cosplayOn = $('m-cosplay') && $('m-cosplay').checked;
-  const persona = cosplayOn ? matchPersona(p.name) : null;
-  const cosplayBlock = persona ?
-    `\n\n【角色扮演·${persona.source}】你的名字是「${p.name}」，你必须完全代入这个角色！
-${persona.persona}
+  const userPersona = (playerConfigs[p.id] && playerConfigs[p.id].persona) ? playerConfigs[p.id].persona.trim() : '';
+  const cosplayBlock = (cosplayOn && userPersona) ?
+    `\n\n【角色扮演】你的名字是「${p.name}」，你必须完全代入这个角色！
+${userPersona}
 【重要】你的发言、思考、语气、用词、动作描写都必须100%符合这个角色。用这个角色会说的话来玩狼人杀。
 可以在发言中穿插*动作描写*来增加角色感。但不要忘记你在玩狼人杀，推理和博弈才是核心。
 不要生硬地念台词，要自然融入狼人杀的讨论中。` : '';
-  const cosplayHint = (cosplayOn && !persona && !S.pureAI) ?
+  const cosplayHint = (cosplayOn && !userPersona && !S.pureAI) ?
     `\n\n【角色代入】你的名字是「${p.name}」。请根据这个名字自由想象一个有趣的人格，用符合这个名字气质的方式说话。` : '';
   const deathCauseMap = {
     'kill':'夜晚被狼人杀害','poison':'夜晚被女巫毒死',
@@ -3026,8 +2824,31 @@ function startGame() {
   S.playerId = pid;
   S.abortCtrl = new AbortController();
   S.meetingsLeft = 2; S.lastMeetingRound = 0;
-  const shuffled = shuffle(cfg.roles);
-  S.players = shuffled.map((rid, i) => ({
+  // ★ 支持手动指定角色身份：先收集手动指定的，再随机分配剩余
+  const roleArray = cfg.roles.slice(); // 复制角色池
+  const manualAssign = {}; // pid -> roleId
+  for (const pidStr in playerConfigs) {
+    const pc = playerConfigs[pidStr];
+    if (pc.role && ALL_ROLES[pc.role]) {
+      const pidNum = parseInt(pidStr);
+      if (pidNum >= 0 && pidNum < cfg.count) {
+        // 从角色池中移除一个该角色
+        const idx = roleArray.indexOf(pc.role);
+        if (idx !== -1) {
+          roleArray.splice(idx, 1);
+          manualAssign[pidNum] = pc.role;
+        }
+      }
+    }
+  }
+  const shuffledRemain = shuffle(roleArray);
+  let remainIdx = 0;
+  const finalRoles = [];
+  for (let i = 0; i < cfg.count; i++) {
+    if (manualAssign[i]) finalRoles.push(manualAssign[i]);
+    else finalRoles.push(shuffledRemain[remainIdx++]);
+  }
+  S.players = finalRoles.map((rid, i) => ({
     id:i, role:ALL_ROLES[rid], alive:true, revealed:false, memory:[],
     name: curNames[i]||'P'+(i+1), isPlayer: i===pid, poisoned:false,
     canVote:true, mbti:null, mbtiKey:''
@@ -3051,12 +2872,9 @@ function startGame() {
     Render.log('system','🧠 '+S.players.map(p=>p.name+'('+(p.mbti?p.mbti.emoji:'')+')').join(' '));
   }
   if ($('m-cosplay').checked) {
-    const matched = S.players.filter(p => matchPersona(p.name));
-    if (matched.length) {
-      Render.log('system','🎭 角色扮演：'+matched.map(p => {
-        const per = matchPersona(p.name);
-        return per.emoji+p.name+'('+per.source+')';
-      }).join(' '));
+    const withPersona = S.players.filter(p => playerConfigs[p.id] && playerConfigs[p.id].persona);
+    if (withPersona.length) {
+      Render.log('system','🎭 角色扮演：'+withPersona.map(p => '🎭'+p.name).join(' '));
     }
   }
   Render.log('night','🌙 第一夜…');
@@ -3234,18 +3052,12 @@ function renderCosplayPresets() {
   const box = $('cosplay-presets');
   if (!box) return;
   if (!$('m-cosplay').checked) { box.innerHTML = ''; return; }
-  box.innerHTML = '';
-  for (const label in PERSONA_PRESETS) {
-    const btn = document.createElement('button');
-    btn.textContent = label;
-    btn.title = PERSONA_PRESETS[label].join(', ');
-    btn.addEventListener('click', () => {
-      $('cnames').value = PERSONA_PRESETS[label].join(',');
-      saveCfg();
-      Render.log('system','🎭 已载入预设：'+label);
-    });
-    box.appendChild(btn);
-  }
+  // 显示已配置人设的角色数量提示
+  let cnt = 0;
+  for (const pid in playerConfigs) { if (playerConfigs[pid].persona) cnt++; }
+  box.innerHTML = cnt > 0
+    ? '<span style="font-size:0.65em;color:var(--gold);font-family:var(--font-title)">🎭 已配置 '+cnt+' 个角色人设（点击命牌编辑）</span>'
+    : '<span style="font-size:0.65em;color:#5a5040;font-family:var(--font-title)">🎭 点击命牌可为角色配置自定义人设</span>';
 }
 function applyAll() {
   const u=$('g-url').value, k=$('g-key').value, m=$('g-model').value;
@@ -3258,6 +3070,13 @@ function applyAll() {
  *  § 23. 导出
  * ================================================================ */
 function openExport() {
+  // 恢复导出记录模式的 UI
+  $('ebox-title').innerText = '── 导出记录 ──';
+  $('e-th-label').style.display = '';
+  $('btn-copye').style.display = '';
+  $('btn-dle').style.display = '';
+  $('btn-importcfg-go').style.display = 'none';
+  $('etxt').placeholder = '';
   const inc = $('e-th').checked;
   let txt = `水墨江湖 · 狼人杀 ${(MODE_CONFIGS[S.mode]||{}).name||'自定义'}${S.pureAI?' [天机]':''}\n${'═'.repeat(40)}\n`;
   S.players.forEach(p => { txt += `P${p.id+1} ${p.name} ${p.role.emoji}${p.role.name} ${p.mbti?p.mbti.name:''} [${p.alive?'存活':'殁'}]\n`; });
@@ -3271,15 +3090,88 @@ function openExport() {
   $('epop').classList.add('show');
 }
 
+function exportConfig() {
+  const cfg = {
+    _type: 'wg_config',
+    url: $('g-url').value,
+    key: $('g-key').value,
+    model: $('g-model').value,
+    spd: $('g-spd').value,
+    cnames: $('cnames').value,
+    anon: $('m-anon').checked,
+    trial: $('m-trial').checked,
+    hdeath: $('m-hdeath').checked,
+    mbti: $('m-mbti').checked,
+    cosplay: $('m-cosplay').checked,
+    pconfigs: playerConfigs,
+    conc: {
+      speak: getC('c-speak'), vote: getC('c-vote'), wolf: getC('c-wolf'),
+      wvote: getC('c-wvote'), strat: getC('c-strat'), svote: getC('c-svote'),
+      trial: getC('c-trial'), end: getC('c-end')
+    }
+  };
+  $('ebox-title').innerText = '── 导出配置 ──';
+  $('e-th-label').style.display = 'none';
+  $('btn-copye').style.display = '';
+  $('btn-dle').style.display = '';
+  $('btn-importcfg-go').style.display = 'none';
+  $('etxt').value = JSON.stringify(cfg, null, 2);
+  $('epop').classList.add('show');
+}
+function importConfigUI() {
+  $('ebox-title').innerText = '── 导入配置 ──';
+  $('e-th-label').style.display = 'none';
+  $('btn-copye').style.display = 'none';
+  $('btn-dle').style.display = 'none';
+  $('btn-importcfg-go').style.display = '';
+  $('etxt').value = '';
+  $('etxt').placeholder = '粘贴配置 JSON 到此处…';
+  $('epop').classList.add('show');
+}
+function importConfigApply() {
+  try {
+    const d = JSON.parse($('etxt').value);
+    if (!d || d._type !== 'wg_config') { alert('❌ 无效的配置格式'); return; }
+    if (d.url) $('g-url').value = d.url;
+    if (d.key) $('g-key').value = d.key;
+    if (d.model) $('g-model').value = d.model;
+    if (d.spd) $('g-spd').value = d.spd;
+    if (d.anon !== undefined) $('m-anon').checked = d.anon;
+    if (d.trial !== undefined) $('m-trial').checked = d.trial;
+    if (d.hdeath !== undefined) $('m-hdeath').checked = d.hdeath;
+    if (d.mbti !== undefined) $('m-mbti').checked = d.mbti;
+    if (d.cosplay !== undefined) $('m-cosplay').checked = d.cosplay;
+    if (d.cnames) $('cnames').value = d.cnames;
+    if (d.pconfigs) playerConfigs = d.pconfigs;
+    if (d.conc) {
+      for (const [k, el] of [['speak','c-speak'],['vote','c-vote'],['wolf','c-wolf'],
+        ['wvote','c-wvote'],['strat','c-strat'],['svote','c-svote'],['trial','c-trial'],['end','c-end']])
+        if (d.conc[k]) $(el).value = d.conc[k];
+    }
+    saveCfg();
+    renderCosplayPresets();
+    $('epop').classList.remove('show');
+    Render.log('system', '✅ 配置导入成功');
+  } catch (e) {
+    alert('❌ JSON 解析失败：' + e.message);
+  }
+}
+
 async function fetchModels() {
   const u=$('g-url').value.replace(/\/$/,''), k=$('g-key').value;
   try {
     const r = await fetch(u+'/models', {headers:{'Authorization':'Bearer '+k}});
     const d = await r.json();
-    const s = $('g-model');
-    s.innerHTML = '';
-    (d.data||[]).forEach(m => { s.innerHTML += `<option value="${m.id}">${m.id}</option>`; });
-    Render.log('system','✅ 拉取成功'); saveCfg();
+    const models = (d.data||[]).map(m => m.id);
+    if (models.length) {
+      // 如果当前模型不在列表中，设为第一个
+      const cur = $('g-model').value;
+      if (!models.includes(cur)) $('g-model').value = models[0];
+      Render.log('system','✅ 拉取到 '+models.length+' 个模型：'+models.slice(0,8).join(', ')+(models.length>8?'…':''));
+    } else {
+      Render.log('system','⚠️ 未获取到模型列表');
+    }
+    saveCfg();
   } catch(e) { Render.log('system','❌ '+e.message); }
 }
 async function testAPI() {
@@ -3322,7 +3214,24 @@ function bindEvents() {
   $('bst').addEventListener('click', startGame);
   $('bne').addEventListener('click', nextStep);
   $('bau').addEventListener('click', toggleAuto);
-  $('btn-export').addEventListener('click', openExport);
+  $('btn-export').addEventListener('click', e => {
+    const menu = $('exportMenu');
+    if (menu.classList.contains('show')) { menu.classList.remove('show'); return; }
+    const rect = e.target.getBoundingClientRect();
+    menu.style.left = rect.left + 'px';
+    menu.style.bottom = (window.innerHeight - rect.top + 4) + 'px';
+    menu.classList.add('show');
+  });
+  document.addEventListener('click', e => {
+    const menu = $('exportMenu');
+    if (menu.classList.contains('show') && !menu.contains(e.target) && e.target.id !== 'btn-export') {
+      menu.classList.remove('show');
+    }
+  });
+  $('em-record').addEventListener('click', () => { $('exportMenu').classList.remove('show'); openExport(); });
+  $('em-exportcfg').addEventListener('click', () => { $('exportMenu').classList.remove('show'); exportConfig(); });
+  $('em-importcfg').addEventListener('click', () => { $('exportMenu').classList.remove('show'); importConfigUI(); });
+  $('btn-importcfg-go').addEventListener('click', importConfigApply);
   $('btn-reset').addEventListener('click', forceReset);
 
   $('btn-fetch').addEventListener('click', fetchModels);
@@ -3414,16 +3323,58 @@ function openPCfg(i) {
   $('pcu').value = c.url||'';
   $('pck').value = c.key||'';
   $('pcm').value = c.model||'';
+  $('pcpersona').value = c.persona||'';
+  // 填充身份选择框
+  const sel = $('pcrole');
+  sel.innerHTML = '<option value="">身份(随机)</option>';
+  const cfg = MODE_CONFIGS[S.mode];
+  if (cfg) {
+    // 统计当前模式中各角色的总数
+    const rolePool = {};
+    cfg.roles.forEach(rid => { rolePool[rid] = (rolePool[rid]||0) + 1; });
+    // 统计已被其他玩家手动指定的角色数
+    const assigned = {};
+    for (const pid in playerConfigs) {
+      if (parseInt(pid) !== i && playerConfigs[pid].role) {
+        assigned[playerConfigs[pid].role] = (assigned[playerConfigs[pid].role]||0) + 1;
+      }
+    }
+    // 生成可选项
+    const added = {};
+    for (const rid in rolePool) {
+      if (added[rid]) continue;
+      added[rid] = true;
+      const r = ALL_ROLES[rid];
+      if (!r) continue;
+      const total = rolePool[rid];
+      const used = assigned[rid] || 0;
+      const remain = total - used;
+      const opt = document.createElement('option');
+      opt.value = rid;
+      opt.textContent = r.emoji + r.name + (remain <= 0 ? ' (已满)' : ' (剩'+remain+')');
+      if (remain <= 0) opt.disabled = true;
+      sel.appendChild(opt);
+    }
+  }
+  sel.value = c.role || '';
   $('pcpop').classList.add('show');
 }
 function savePCfg() {
   const nm=$('pcname').value.trim(), u=$('pcu').value.trim(), k=$('pck').value.trim(), m=$('pcm').value.trim();
-  if (nm||u||k||m) {
+  const persona = $('pcpersona').value.trim();
+  const role = $('pcrole').value;
+  if (nm||u||k||m||persona||role) {
     if (!playerConfigs[currentCfgP]) playerConfigs[currentCfgP]={};
-    if (nm) playerConfigs[currentCfgP].name=nm;
-    if (u)  playerConfigs[currentCfgP].url=u;
-    if (k)  playerConfigs[currentCfgP].key=k;
-    if (m)  playerConfigs[currentCfgP].model=m;
+    if (nm) playerConfigs[currentCfgP].name=nm; else delete playerConfigs[currentCfgP].name;
+    if (u)  playerConfigs[currentCfgP].url=u;   else delete playerConfigs[currentCfgP].url;
+    if (k)  playerConfigs[currentCfgP].key=k;   else delete playerConfigs[currentCfgP].key;
+    if (m)  playerConfigs[currentCfgP].model=m;  else delete playerConfigs[currentCfgP].model;
+    if (persona) playerConfigs[currentCfgP].persona=persona; else delete playerConfigs[currentCfgP].persona;
+    if (role) playerConfigs[currentCfgP].role=role; else delete playerConfigs[currentCfgP].role;
+    // 清理空对象
+    if (Object.keys(playerConfigs[currentCfgP]).length === 0) delete playerConfigs[currentCfgP];
+  } else {
+    delete playerConfigs[currentCfgP];
   }
   if (nm) { curNames[currentCfgP]=nm; const pn=$('pn-'+currentCfgP); if(pn) pn.textContent=nm; renderBatch(); }
   saveCfg();
