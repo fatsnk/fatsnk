@@ -1715,13 +1715,15 @@ function buildSystemPrompt(p) {
   const wb = S.pureAI ? WORLD_BOOK_PUREAI : WORLD_BOOK_NORMAL;
   const trialBlock = (!S.pureAI && trialOn) ? TRIAL_BOOK : '';
   const guide = ALL_ROLES[p.role.id] ? ALL_ROLES[p.role.id].guide : '';
-  const mbtiBlock = (!S.pureAI && p.mbti) ?
+  // 当 Cosplay 开启且该玩家有自定义人设时，不注入 MBTI 性格，让角色设定优先
+  const cosplayOn = $('m-cosplay') && $('m-cosplay').checked;
+  const hasPersona = !!(playerConfigs[p.id] && playerConfigs[p.id].persona && playerConfigs[p.id].persona.trim());
+  const mbtiBlock = (!S.pureAI && p.mbti && !cosplayOn) ?
     `\n【你的性格(${p.mbtiKey})】${p.mbti.desc} 优点:${p.mbti.pos} 缺点:${p.mbti.neg}\n注意：不要在发言中提到你的性格类型！` : '';
   const wolfStratBlock = (p.role.team==='bad' && S.wolfStrategy) ?
     `\n【狼队当前大方向】策略名「${S.wolfStrategyName}」：${S.wolfStrategy}` : '';
   // ★ 角色扮演(Cosplay)人格注入 — 从 playerConfigs 读取用户自定义人设
-  const cosplayOn = $('m-cosplay') && $('m-cosplay').checked;
-  const userPersona = (playerConfigs[p.id] && playerConfigs[p.id].persona) ? playerConfigs[p.id].persona.trim() : '';
+  const userPersona = hasPersona ? playerConfigs[p.id].persona.trim() : '';
   const cosplayBlock = (cosplayOn && userPersona) ?
     `\n\n【角色扮演】你的名字是「${p.name}」，你必须完全代入这个角色！
 ${userPersona}
