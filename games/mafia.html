@@ -1393,7 +1393,7 @@ body.is-wolf.night-phase .wolf-meeting-btn { display: block; }
   </div>
 </div>
 
-<div class="devc" id="devc"><div class="devh"><span>🖥️ 开发者</span><button id="btn-cleardev">清空</button></div><div class="devl" id="devl"></div></div>
+<div class="devc" id="devc"><div class="devh"><span>🖥️ 开发者</span><div><button id="btn-cleardev">清空</button><button id="btn-devclose">收起 ▼</button></div></div><div class="devl" id="devl"></div></div>
 <button class="devt" id="btn-devtog">🖥️</button>
 
 <script>
@@ -1518,7 +1518,11 @@ let customTotal = 10, customCounts = {}, detailStates = {};
 const getSpd   = () => parseFloat($('g-spd').value) || 1;
 const getC     = id => Math.max(1, parseInt($(id).value) || 1);
 const sleep    = ms => new Promise(r => setTimeout(r, ms));
-const scrollGL = () => { const el = $('gl'); el.scrollTop = el.scrollHeight; };
+const scrollGL = () => {
+  const el = $('gl');
+  const isNearBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 50;
+  if (isNearBottom) el.scrollTop = el.scrollHeight;
+};
 const isAnon   = () => $('m-anon').checked;
 const shuffle  = a => a.slice().sort(() => Math.random() - .5);
 
@@ -3455,6 +3459,7 @@ function bindEvents() {
   $('btn-devtog').addEventListener('click', () => $('devc').classList.toggle('open'));
   $('btn-devtog-hbar').addEventListener('click', () => $('devc').classList.toggle('open'));
   $('btn-cleardev').addEventListener('click', () => $('devl').innerHTML='');
+  $('btn-devclose').addEventListener('click', () => $('devc').classList.remove('open'));
 
   $('wmBtn').addEventListener('click', () => {
     if (S.meetingsLeft<=0 || S.phase!=='night' || !S.running) return;
