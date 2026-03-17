@@ -1029,6 +1029,59 @@ body.hmbti .mbtitag { display: none; }
 .export-menu button:last-child { border-bottom: none; }
 .export-menu button:hover { background: rgba(200,168,76,0.15); color: var(--gold); }
 
+/* 模型列表弹窗 */
+.model-list-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.85); z-index: 850;
+  justify-content: center; align-items: center; padding: 16px;
+}
+.model-list-overlay.show { display: flex; }
+.model-list-box {
+  background: linear-gradient(180deg, #2a2418, #1e1a14);
+  border: var(--border-gold);
+  border-radius: var(--r-lg);
+  padding: 20px; width: 100%; max-width: 400px;
+  max-height: 70vh; display: flex; flex-direction: column;
+}
+.model-list-box h3 {
+  font-family: var(--font-title);
+  color: var(--gold); margin-bottom: 10px;
+  text-align: center; font-size: 1em;
+  letter-spacing: 0.1em;
+}
+.model-list-box .model-search {
+  width: 100%; margin-bottom: 8px;
+  background: rgba(0,0,0,0.3);
+  border: 1px solid rgba(200,180,140,0.3);
+  color: #c8bfa8; border-radius: var(--r);
+  padding: 6px 8px; font-size: 0.8em;
+}
+.model-list-items {
+  flex: 1; overflow-y: auto; display: flex;
+  flex-direction: column; gap: 3px;
+}
+.model-list-items button {
+  display: block; width: 100%;
+  padding: 8px 12px; text-align: left;
+  background: rgba(255,255,255,0.04);
+  color: #c8bfa8; font-family: var(--font-body);
+  font-size: 0.78em; border: 1px solid rgba(200,180,140,0.1);
+  border-radius: var(--r); cursor: pointer;
+  transition: 0.15s; word-break: break-all;
+}
+.model-list-items button:hover {
+  background: rgba(200,168,76,0.15);
+  border-color: var(--gold); color: var(--gold);
+}
+.model-list-box .model-list-close {
+  margin-top: 10px; padding: 8px;
+  background: rgba(255,255,255,0.08); color: #8a7e6a;
+  border: 1px solid rgba(200,180,140,0.2);
+  border-radius: var(--r); font-family: var(--font-title);
+  font-size: 0.8em; cursor: pointer; text-align: center;
+}
+.model-list-box .model-list-close:hover { background: rgba(255,255,255,0.15); }
+
 /* 审判弹窗 */
 .overlay#orp .pbox { border-color: #b86b2a; }
 
@@ -1268,7 +1321,7 @@ body.is-wolf.night-phase .wolf-meeting-btn { display: block; }
   <div class="row"><label>名讳</label><input type="text" id="pcname" placeholder="留空随机"></div>
   <div class="row"><label>API地址</label><input type="text" id="pcu" placeholder="留空用全局"></div>
   <div class="row"><label>API密钥</label><input type="password" id="pck" placeholder="留空用全局"></div>
-  <div class="row"><label>模型</label><input type="text" id="pcm" placeholder="留空用全局"></div>
+  <div class="row"><label>模型</label><div style="display:flex;gap:4px;align-items:center"><input type="text" id="pcm" placeholder="留空用全局" style="flex:1"><button id="pcm-fetch" style="padding:4px 8px;font-size:0.7em;background:rgba(74,96,116,0.3);color:#8aa0b0;border:1px solid var(--indigo);border-radius:var(--r);font-family:var(--font-title);white-space:nowrap;cursor:pointer">📡</button></div></div>
   <div class="row"><label>人设</label><textarea id="pcpersona" placeholder="自定义角色人设（留空则无特殊人设）&#10;例：你是L，世界第一侦探，说话慢且平淡…" rows="4" style="width:100%;background:rgba(0,0,0,0.3);border:1px solid rgba(200,180,140,0.2);color:#c8bfa8;border-radius:var(--r);padding:8px;font-size:0.8em;font-family:var(--font-body);resize:vertical;"></textarea></div>
   <div class="btns"><button class="btn-cancel" id="pccancel">取消</button><button id="pcsave" style="background:rgba(74,96,116,0.3);color:#8aa0b0;border:1px solid var(--indigo)">保存</button></div>
 </div></div>
@@ -1286,6 +1339,16 @@ body.is-wolf.night-phase .wolf-meeting-btn { display: block; }
 </div>
 
 <div class="epop" id="epop"><div class="ebox"><h3 id="ebox-title">── 导出记录 ──</h3><label id="e-th-label" style="font-size:.72em;color:#8a7e6a;display:flex;align-items:center;gap:4px;margin-bottom:6px"><input type="checkbox" id="e-th" style="width:auto;min-width:auto">含内心独白</label><textarea id="etxt"></textarea><div class="btns"><button id="btn-copye" style="background:rgba(92,138,111,0.2);color:var(--jade);border:1px solid var(--jade)">📋 复制</button><button id="btn-dle" style="background:rgba(74,96,116,0.2);color:#8aa0b0;border:1px solid var(--indigo)">💾 下载</button><button id="btn-importcfg-go" style="display:none;background:rgba(200,168,76,0.2);color:var(--gold);border:1px solid var(--gold)">📥 导入</button><button id="btn-closee" style="background:rgba(255,255,255,0.08);color:#8a7e6a;border:1px solid rgba(200,180,140,0.2)">关闭</button></div></div></div>
+
+<!-- ══════ 模型列表弹窗 ══════ -->
+<div class="model-list-overlay" id="modelListOverlay">
+  <div class="model-list-box">
+    <h3>── 选择模型 ──</h3>
+    <input type="text" class="model-search" id="modelSearch" placeholder="🔍 搜索模型…">
+    <div class="model-list-items" id="modelListItems"></div>
+    <button class="model-list-close" id="modelListClose">关闭</button>
+  </div>
+</div>
 
 <div class="devc" id="devc"><div class="devh"><span>🖥️ 开发者</span><button id="btn-cleardev">清空</button></div><div class="devl" id="devl"></div></div>
 <button class="devt" id="btn-devtog">🖥️</button>
@@ -3157,22 +3220,54 @@ function importConfigApply() {
   }
 }
 
+let _modelListTarget = null; // 'global' | 'pc'
+let _cachedModels = [];
+
 async function fetchModels() {
-  const u=$('g-url').value.replace(/\/$/,''), k=$('g-key').value;
+  await fetchAndShowModels($('g-url').value, $('g-key').value, 'global');
+}
+
+async function fetchModelsForPC() {
+  const c = playerConfigs[currentCfgP] || {};
+  const u = c.url || $('g-url').value;
+  const k = c.key || $('g-key').value;
+  await fetchAndShowModels(u, k, 'pc');
+}
+
+async function fetchAndShowModels(url, key, target) {
+  const u = url.replace(/\/$/, '');
+  if (!key) { Render.log('system','⚠️ 未配置API密钥'); return; }
   try {
-    const r = await fetch(u+'/models', {headers:{'Authorization':'Bearer '+k}});
+    const r = await fetch(u+'/models', {headers:{'Authorization':'Bearer '+key}});
     const d = await r.json();
-    const models = (d.data||[]).map(m => m.id);
-    if (models.length) {
-      // 如果当前模型不在列表中，设为第一个
-      const cur = $('g-model').value;
-      if (!models.includes(cur)) $('g-model').value = models[0];
-      Render.log('system','✅ 拉取到 '+models.length+' 个模型：'+models.slice(0,8).join(', ')+(models.length>8?'…':''));
-    } else {
-      Render.log('system','⚠️ 未获取到模型列表');
-    }
-    saveCfg();
+    const models = (d.data||[]).map(m => m.id).sort();
+    if (!models.length) { Render.log('system','⚠️ 未获取到模型列表'); return; }
+    _cachedModels = models;
+    _modelListTarget = target;
+    renderModelList(models);
+    $('modelSearch').value = '';
+    $('modelListOverlay').classList.add('show');
+    Render.log('system','✅ 拉取到 '+models.length+' 个模型');
   } catch(e) { Render.log('system','❌ '+e.message); }
+}
+
+function renderModelList(models) {
+  const g = $('modelListItems');
+  g.innerHTML = '';
+  models.forEach(m => {
+    const b = document.createElement('button');
+    b.textContent = m;
+    b.onclick = () => {
+      if (_modelListTarget === 'global') {
+        $('g-model').value = m;
+      } else if (_modelListTarget === 'pc') {
+        $('pcm').value = m;
+      }
+      $('modelListOverlay').classList.remove('show');
+      saveCfg();
+    };
+    g.appendChild(b);
+  });
 }
 async function testAPI() {
   const u=$('g-url').value.replace(/\/$/,''), k=$('g-key').value, m=$('g-model').value;
@@ -3297,6 +3392,13 @@ function bindEvents() {
   });
   $('btn-closee').addEventListener('click', () => $('epop').classList.remove('show'));
   $('e-th').addEventListener('change', () => { if($('epop').classList.contains('show')) openExport(); });
+
+  $('modelListClose').addEventListener('click', () => $('modelListOverlay').classList.remove('show'));
+  $('modelSearch').addEventListener('input', () => {
+    const q = $('modelSearch').value.toLowerCase();
+    renderModelList(q ? _cachedModels.filter(m => m.toLowerCase().includes(q)) : _cachedModels);
+  });
+  $('pcm-fetch').addEventListener('click', fetchModelsForPC);
 
   $('btn-devtog').addEventListener('click', () => $('devc').classList.toggle('open'));
   $('btn-cleardev').addEventListener('click', () => $('devl').innerHTML='');
