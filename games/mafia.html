@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>狼人杀 · 水墨江湖</title>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <style>
 /* ══════════════════════════════════════
    § 古风色彩系统
@@ -720,6 +721,38 @@ body.hmbti .mbtitag { display: none; }
   border-radius: 2px;
   line-height: 1.6;
 }
+/* Markdown 渲染样式 */
+.log-game p { margin: 0.3em 0; }
+.log-game h1, .log-game h2, .log-game h3, .log-game h4 {
+  font-family: var(--font-title); color: var(--gold-light);
+  margin: 0.4em 0 0.2em; font-size: 1em;
+}
+.log-game h1 { font-size: 1.15em; }
+.log-game h2 { font-size: 1.08em; }
+.log-game strong { color: var(--gold-light); }
+.log-game em { color: #a09a88; font-style: italic; }
+.log-game code {
+  background: rgba(0,0,0,0.3); color: #e0c068;
+  padding: 1px 4px; border-radius: 2px;
+  font-family: monospace; font-size: 0.9em;
+}
+.log-game pre {
+  background: rgba(0,0,0,0.3); padding: 6px 8px;
+  border-radius: var(--r); overflow-x: auto;
+  margin: 0.3em 0;
+}
+.log-game pre code { background: none; padding: 0; }
+.log-game ul, .log-game ol { padding-left: 1.5em; margin: 0.3em 0; }
+.log-game li { margin: 0.15em 0; }
+.log-game blockquote {
+  border-left: 2px solid var(--gold); padding-left: 8px;
+  color: #a09a88; margin: 0.3em 0;
+}
+.log-game hr { border: none; border-top: 1px solid rgba(200,180,140,0.15); margin: 0.4em 0; }
+.log-game a { color: var(--gold); text-decoration: underline; }
+.log-game table { border-collapse: collapse; margin: 0.3em 0; font-size: 0.9em; }
+.log-game th, .log-game td { border: 1px solid rgba(200,180,140,0.2); padding: 3px 6px; }
+.log-game th { background: rgba(200,168,76,0.1); color: var(--gold-light); }
 
 /* 打字光标 */
 .typing-cursor {
@@ -1098,27 +1131,37 @@ body.hmbti .mbtitag { display: none; }
   padding: 4px 8px; background: #1a1a1a;
   border-bottom: 1px solid #333;
 }
-.devh span { color: #0f0; font-family: monospace; font-size: 0.65em; }
+.devh span { color: #b87333; font-family: monospace; font-size: 0.65em; }
 .devh button {
-  background: #333; color: #fff; padding: 2px 6px;
+  background: #333; color: #e0b084; padding: 2px 6px;
   border: 1px solid #555; border-radius: 2px; font-size: 0.6em;
 }
 .devl {
   flex: 1; overflow-y: auto; padding: 4px;
-  font-family: monospace; font-size: 0.62em; color: #ccc;
+  font-family: monospace; font-size: 0.62em; color: #d4a373;
 }
 .devl .ent { padding: 2px 0; border-bottom: 1px solid #222; white-space: pre-wrap; word-break: break-all; }
-.devl .req { color: #48dbfb; }
-.devl .res { color: #26de81; }
-.devl .err { color: #e74c3c; }
+.devl .req { color: #e0b084; }
+.devl .res { color: #b87333; }
+.devl .err { color: #c04000; }
 .devt {
   position: fixed; bottom: 4px; right: 4px;
-  background: #222; color: #0f0;
-  border: 1px solid #0f0; padding: 2px 6px;
+  background: #222; color: #b87333;
+  border: 1px solid #b87333; padding: 2px 6px;
   border-radius: 2px; cursor: pointer;
   font-family: monospace; font-size: 0.6em; z-index: 1001;
+  display: none; /* 隐藏右下角小按钮，已移到顶栏 */
 }
 .devc.open ~ .devt { bottom: 224px; }
+.devt-hbar {
+  background: rgba(184,115,51,0.08); color: #b87333;
+  border: 1px solid rgba(184,115,51,0.3); padding: 3px 10px;
+  border-radius: var(--r); cursor: pointer;
+  font-family: monospace; font-size: 0.7em;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+.devt-hbar:hover { background: rgba(184,115,51,0.2); border-color: #b87333; }
 
 /* ══════════════════════════════════════
    § 按钮组（令牌）
@@ -1251,7 +1294,7 @@ body.is-wolf.night-phase .wolf-meeting-btn { display: block; }
       <button class="bb" id="btn-back">← 退</button>
       <span id="hir">第零回</span><span id="hip">待命</span><span id="hia">存活:10</span>
       <span id="hmode" style="font-size:.6em;color:#7a5ea6"></span>
-      <span class="apih">▼ 展开设置</span>
+      <button class="devt-hbar" id="btn-devtog-hbar" title="开发者日志">🖥️LOG</button>
     </div>
     <div class="pbar-toggle" id="pbarTog">── 展开命牌 ▼ ──</div>
     <div class="pbar" id="pbar"></div>
@@ -1597,7 +1640,8 @@ const Render = {
   logSpeech(p, g) {
     const d = document.createElement('div');
     d.className = 'le speech';
-    d.innerHTML = `<div class="lh"><span>${getEmoji(p)}</span><span class="name">${p.name}</span></div><div class="log-game">${g||'(沉默)'}</div>`;
+    const gameHtml = (typeof marked !== 'undefined' && g) ? (() => { try { return marked.parse(g); } catch(e) { return g||'(沉默)'; } })() : (g||'(沉默)');
+    d.innerHTML = `<div class="lh"><span>${getEmoji(p)}</span><span class="name">${p.name}</span></div><div class="log-game">${gameHtml}</div>`;
     $('gl').appendChild(d);
     scrollGL();
     if (g) S.history.push({phase:S.phase, name:p.name, text:g});
@@ -1690,8 +1734,9 @@ const Render = {
     d.className = 'ent ' + t;
     d.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
     const el = $('devl');
+    const isAtBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 30;
     el.appendChild(d);
-    el.scrollTop = el.scrollHeight;
+    if (isAtBottom) el.scrollTop = el.scrollHeight;
   }
 };
 
@@ -1779,7 +1824,7 @@ async function callAI(p, prompt, opts) {
       if (S.gameId !== myGid) return {thinking:'',game:'',action:'',strategy:''};
       if (!res.ok) {
         const errText = await res.text().catch(() => '');
-        Render.devLog('err', `[P${p.id+1}] HTTP ${res.status}: ${errText.slice(0,200)}`);
+        Render.devLog('err', `[P${p.id+1}] HTTP ${res.status}: ${errText.slice(0,20000)}`);
         throw new Error('HTTP '+res.status);
       }
       const data = await res.json();
@@ -1788,7 +1833,7 @@ async function callAI(p, prompt, opts) {
         Render.devLog('err', `[P${p.id+1}] 响应无content: ${JSON.stringify(data).slice(0,300)}`);
         throw new Error('无有效响应内容');
       }
-      Render.devLog('res', `[P${p.id+1}] ${content.slice(0,200)}`);
+      Render.devLog('res', `[P${p.id+1}] ${content.slice(0,20000)}`);
       const parsed = parseAI(content);
       if (!opts.noMemory) p.memory.push({role:'user',content:prompt},{role:'assistant',content:content});
       return parsed;
@@ -1828,6 +1873,10 @@ async function fakeStream(el, text) {
     await sleep(d / sp);
   }
   cur.remove();
+  // Markdown 渲染
+  if (typeof marked !== 'undefined') {
+    try { el.innerHTML = marked.parse(text); } catch(e) {}
+  }
 }
 const ftp = () => sleep((80 + Math.random()*120) / getSpd());
 
@@ -3404,6 +3453,7 @@ function bindEvents() {
   $('pcm-fetch').addEventListener('click', fetchModelsForPC);
 
   $('btn-devtog').addEventListener('click', () => $('devc').classList.toggle('open'));
+  $('btn-devtog-hbar').addEventListener('click', () => $('devc').classList.toggle('open'));
   $('btn-cleardev').addEventListener('click', () => $('devl').innerHTML='');
 
   $('wmBtn').addEventListener('click', () => {
