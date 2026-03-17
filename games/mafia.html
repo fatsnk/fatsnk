@@ -3144,7 +3144,8 @@ function openExport() {
   $('etxt').placeholder = '';
   const inc = $('e-th').checked;
   let txt = `水墨江湖 · 狼人杀 ${(MODE_CONFIGS[S.mode]||{}).name||'自定义'}${S.pureAI?' [天机]':''}\n${'═'.repeat(40)}\n`;
-  S.players.forEach(p => { txt += `P${p.id+1} ${p.name} ${p.role.emoji}${p.role.name} ${p.mbti?p.mbti.name:''} [${p.alive?'存活':'殁'}]\n`; });
+  const showMbti = !$('m-cosplay').checked;
+  S.players.forEach(p => { txt += `P${p.id+1} ${p.name} ${p.role.emoji}${p.role.name}${showMbti&&p.mbti?' '+p.mbti.name:''} [${p.alive?'存活':'殁'}]\n`; });
   txt += '═'.repeat(40)+'\n\n';
   gameRecord.forEach(r => {
     if (r.type==='system') txt += '─── '+r.text+' ───\n\n';
