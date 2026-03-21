@@ -189,8 +189,8 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            min-height: 80px;
-            min-width: 200px;
+            height: 120px; /* 固定高度防止抖动 */
+            min-width: 250px;
             margin-bottom: 1rem;
         }
 
@@ -204,11 +204,11 @@
         }
 
         .logoCarousel-item.active {
-            position: relative;
             opacity: 1;
             transform: scale(1);
             filter: blur(0);
             pointer-events: auto;
+            /* 保持 absolute 状态脱离文档流，不改变容器大小 */
         }
 
         .logoCarousel-item.leaving {
@@ -315,6 +315,59 @@
             background: rgba(255, 255, 255, 0.3);
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        /* Dropdown Styles */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(10px);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            min-width: 220px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            padding: 8px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 100;
+            text-align: left;
+        }
+
+        .dropdown-menu.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(5px);
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            color: #333;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background 0.2s;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .dropdown-item:hover {
+            background: rgba(247, 151, 29, 0.1);
+            color: #f7971d;
+        }
+
+        .dropdown-item .lucide {
+            width: 18px;
+            height: 18px;
         }
 
         .btn-secondary {
@@ -800,6 +853,7 @@
                 background-size: 1000% 1000%;
             }
             .forkText, .sillyText { font-size: 2.5rem; }
+            .logoCarousel { height: 80px; }
             .logoCarousel-img { max-height: 80px; }
             .logo { font-size: 2.5rem; }
             .subtitle { font-size: 1.1rem; }
@@ -918,6 +972,19 @@
 
             .footer { background: #1c2833; }
 
+            .dropdown-menu {
+                background: rgba(30, 30, 30, 0.95);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            }
+            .dropdown-item {
+                color: #e0e0e0;
+            }
+            .dropdown-item:hover {
+                background: rgba(255, 167, 38, 0.15);
+                color: #ffa726;
+            }
+
             .btn-secondary {
                 background: rgba(255, 255, 255, 0.1);
                 color: #f5f5f5;
@@ -958,9 +1025,19 @@
             <span class="version-badge">v1.27 — 配置档 · MCP 服务 · 数据备份</span>
 
             <div class="action-buttons">
-                <a href="https://github.com/fatsnk/forksilly.doc/releases/latest" class="btn btn-primary" target="_blank">
-                    <i data-lucide="download"></i> 下载应用
-                </a>
+                <div class="dropdown" id="downloadDropdown">
+                    <div class="btn btn-primary" id="downloadBtn" style="cursor: pointer;">
+                        <i data-lucide="download"></i> 下载应用<i data-lucide="chevron-down" style="width: 16px; height: 16px; margin-left: 0px;"></i>
+                    </div>
+                    <div class="dropdown-menu" id="downloadMenu">
+                        <a href="https://github.com/fatsnk/forksilly.doc/releases" class="dropdown-item" target="_blank">
+                            <i data-lucide="github"></i> GitHub Releases
+                        </a>
+                        <a href="./download/forksilly-latest.zip" class="dropdown-item">
+                            <i data-lucide="package"></i> 直接下载
+                        </a>
+                    </div>
+                </div>
                 <a href="https://github.com/fatsnk/forksilly.doc?tab=readme-ov-file#forksilly%E4%BB%8B%E7%BB%8D" class="btn btn-secondary" target="_blank">
                     <i data-lucide="info"></i> 关于
                 </a>
@@ -1421,6 +1498,27 @@
 
         draw();
     })();
+    </script>
+
+    <!-- Dropdown Script -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var dropdownBtn = document.getElementById('downloadBtn');
+        var dropdownMenu = document.getElementById('downloadMenu');
+        
+        if (dropdownBtn && dropdownMenu) {
+            dropdownBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                dropdownMenu.classList.toggle('show');
+            });
+            
+            document.addEventListener('click', function(e) {
+                if (!dropdownMenu.contains(e.target) && e.target !== dropdownBtn) {
+                    dropdownMenu.classList.remove('show');
+                }
+            });
+        }
+    });
     </script>
 
     <!-- Visit Tracker Script -->
